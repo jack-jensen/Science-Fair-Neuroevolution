@@ -5,4 +5,8 @@ December 31, 2023
 
 I have just created the activations folder and painstakenly filled it with the functions suggested by the cited sources. I created in another file to clean out the main file, which is growing rapidly. In the past week, I have began 
  to constructed the motor and genome classes. I also added some dummy code for the pin class. This will not actually be used in practice, as micropython supplies a module to controll the pins on the microcontroller. 
-So far, the motor class initiates the pins for the motor and has some function skeletons for me to code later. I will initiate this class for all four motors when the time comes. On the other hand, for the genome class, it contains two arrays for the nodes and connections. The array contains the node and connection child class objects. 
+So far, the motor class initiates the pins for the motor and has some function skeletons for me to code later. I will initiate this class for all four motors when the time comes. On the other hand, for the genome class, 
+it contains two arrays for the nodes and connections. The array contains the node and connection child class objects. I have added the code to initiate the first input and output nodes, as well as the connections. The connections are
+assigned to nodes randomly. If a node is connected to itself, then a boolean in the connection object is switched to true. I am not sure if this will be needed, but the cited sources did mention that self-connections are handled 
+differently. In order to control the order that the nodes get activated, I have added an index calculator function that assigns a unique number to each node. I will also have to find out which of the connections gets activated first,
+however!
