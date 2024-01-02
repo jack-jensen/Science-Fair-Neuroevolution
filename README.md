@@ -15,7 +15,7 @@ however!
 ## January 2, 2024
 ### 10:45 am
 
-Yesterday, I began construction on the evaluationGenome function, which looks like this right now:
+Yesterday, I began construction on the evaluationGenome function (in doing this, I also added some more variables to the node and connection classes), which looks like this right now:
 
 
     def evaluateGenome(self, initialInputs, iterationsAllowed, waitTime):
