@@ -15,4 +15,37 @@ however!
 ## January 2, 2024
 ### 10:45 am
 
-Yesterday, I began construction on the evaluationGenome function, which 
+Yesterday, I began construction on the evaluationGenome function, which looks like this right now:
+
+
+    def evaluateGenome(self, initialInputs, iterationsAllowed, waitTime):
+           self.nodes.sort(key=self.sortNodesKey)
+           i = 0
+           while i <= iterationsAllowed:
+               for node in self.nodes:
+                   if node.type == "input":
+                       node.activation = initialInputs[node.index]
+                   else:
+                       #Check bias stuff later - it looks fishy
+                       #Also don't forget to add the gaters later
+                       #Add a wait time as to not overload the motors
+                       for connection in self.connections:
+                           if connection.toIndex == node.index:
+                               if connection.selfConnection:
+                                   node.state += connection.weight * node.state + node.bias
+                               else:
+                                   node.state += connection.weight * self.nodes[connection.fromIndex].activation
+                               
+                       node.activation = node.activationFunction(node.state)
+   
+                       if node.type == "output":
+                           pass
+                       
+               i += 1
+
+
+> First, it sorts the nodes by index. Then, it runs a while loop for the maximum amount of iterations the genome can run. Then it iterates through each node. If the node is an input, then the activation of that node is simply the input.
+Otherwise, it then iterates through each of the connections. If it is a self-connection, then it is handled differently. If the node is an output, then if will probably be added to the motors, but that haesn't been coded yet. I also added
+> some notes for me later.
+
+Then, I created some files to store the html for the dashboard and a file that contains the code to interact with it. There is nothing in there yet.
