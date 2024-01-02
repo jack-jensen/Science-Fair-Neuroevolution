@@ -1,7 +1,7 @@
-LOG
+# LOG
 
-December 31, 2023
-12:30 pm
+## December 31, 2023
+### 12:30 pm
 
 I have just created the activations folder and painstakenly filled it with the functions suggested by the cited sources. I created in another file to clean out the main file, which is growing rapidly. In the past week, I have began 
  to constructed the motor and genome classes. I also added some dummy code for the pin class. This will not actually be used in practice, as micropython supplies a module to controll the pins on the microcontroller. 
@@ -12,7 +12,7 @@ differently. In order to control the order that the nodes get activated, I have 
 however!
 
 
-January 2, 2024
-10:45 am
+## January 2, 2024
+### 10:45 am
 
-Yesterday, 
+Yesterday, I began construction on the evaluationGenome function, which 
