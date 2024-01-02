@@ -2,8 +2,9 @@
 import random
 import math
 from activations import activationFunctions as af
+import time
 
-
+#Dummy code
 class Pin:
     def __init__(self, pin, action):
         pass
@@ -13,7 +14,7 @@ class Pin:
 
     def value(number):
         pass
-#Dummy code above
+
     
 
 class Motor:
@@ -60,6 +61,11 @@ class Genome:
         def __init__(self, type, index):
             self.type = type
             self.index = index
+            self.activation = 0
+            self.state = 0
+            self.bias = 0
+            self.activationFunction = af.linear
+            
 
 
             
@@ -68,6 +74,7 @@ class Genome:
             self.fromIndex = fromIndex
             self.toIndex = toIndex
             self.selfConnection = False
+            self.weight = 0
             
 
     def __init__(self):
@@ -92,12 +99,39 @@ class Genome:
                 self.connections[i].selfConnection = True
 
 
-        
-    def evaluateGenome():
-        pass
-
     
+    def sortNodesKey(self, e):
+        return e.index
+
+
+    def evaluateGenome(self, initialInputs, iterationsAllowed, waitTime):
+        self.nodes.sort(key=self.sortNodesKey)
+        i = 0
+        while i <= iterationsAllowed:
+            for node in self.nodes:
+                if node.type == "input":
+                    node.activation = initialInputs[node.index]
+                else:
+                    #Check bias stuff later - it looks fishy
+                    #Also don't forget to add the gaters later
+                    #Add a wait time as to not overload the motors
+                    for connection in self.connections:
+                        if connection.toIndex == node.index:
+                            if connection.selfConnection:
+                                node.state += connection.weight * node.state + node.bias
+                            else:
+                                node.state += connection.weight * self.nodes[connection.fromIndex].activation
+                            
+                    node.activation = node.activationFunction(node.state)
+
+                    if node.type == "output":
+                        pass
+                    
+            i += 1
+
+        #Get fitness - code once the dashboard is set up
         
+
     def indexCalculator(self):
         newIndex = self.initialIndex
         self.initialIndex += 1
