@@ -49,3 +49,10 @@ Otherwise, it then iterates through each of the connections. If it is a self-con
 > some notes for me later.
 
 Then, I created some files to store the html for the dashboard and a file that contains the code to interact with it. There is nothing in there yet.
+
+
+
+## January 10, 2024
+### 5:30 pm
+
+In the past few days, I have been researching how to make a dashboard for my project. I found an extremely helpful [video](https://www.youtube.com/watch?v=h18LMskRNMA&list=PLvOT6zBnJyYFqKp4dBCS1aZ8Nzbll7qre&index=6), and ended up using code from the video in my project. The files ResponseBuilder.py, ResponseParser.py, and WebConnection.py are all completely not my code. I also used their code as a framwork for main.py. This code is only used for communicating with the webserver. All project-specific code is my own.
