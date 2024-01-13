@@ -56,3 +56,48 @@ Then, I created some files to store the html for the dashboard and a file that c
 ### 5:30 pm
 
 In the past few days, I have been researching how to make a dashboard for my project. I found an extremely helpful [video](https://www.youtube.com/watch?v=h18LMskRNMA&list=PLvOT6zBnJyYFqKp4dBCS1aZ8Nzbll7qre&index=6), and ended up using code from the video in my project. The files ResponseBuilder.py, ResponseParser.py, and WebConnection.py are all completely not my code. I also used their code as a framwork for main.py. This code is only used for communicating with the webserver. All project-specific code is my own.
+
+I moved the motor and genome classes to their own files, and I added some files to hold network credientials and dummy code. Big changes I've added include that in the main file I added the handleRequests method, which is based on the code from the tutorial mentioned above. I tweaked the code and the actions to match my own project. Right now, it is a mess. Also, I created the generationRunner class, which will run a generation. Here is that code so far:
+
+    from Genome import Genome
+    import random
+    #After each indivitaul run is complete, ask if they need to pause
+    
+    class generationRunner:
+        def __init__(self, numberOfGenomes, percentageToDrop):
+            genomes = [Genome(i) for i in numberOfGenomes]
+        
+            rankedGenomes = genomes.sort(genomes, key=lambda item:item.fitness)
+    
+            #Save rankedGenomes list - with all the class genome objects
+    
+    
+            #You may not have to eliminate the genomes. Reproduce all the genomes randomly, then the last
+            # generation 'dies'.
+            numberToEliminate = round(numberOfGenomes / percentageToDrop)
+    
+            for i in range(numberToEliminate):
+                rankedGenomes.pop()
+    
+    
+            while numberOfGenomes < len(rankedGenomes):
+    
+                offspring = Genome()
+                while parent1 != parent2:
+                    parent1 = random.choice(rankedGenomes)
+                    parent2 = random.choice(rankedGenomes)
+                
+                if parent1.size > parent2.size:
+                    offspring.size
+    
+    
+                
+                pass
+    
+            #Sprinkle mutations
+    
+            #Once everything is done, this is what the class outputs
+            return newGenomes, generationData
+
+> This code is based on the cited source in the project proposal
+> It initiates all the genomes state. Later, I will add the code that runs the genome objects. After, the genomes are ranked based on how well their fitness score is. I have added some notes, but currently the plan is to eliminate a certain number of genomes. Then I am currently working on add the crossbreeding. Right now all it does is randomly select two 'parent' genomes.
