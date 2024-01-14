@@ -67,6 +67,8 @@ class activationFunctions:
             return x
         elif x > 1:
             return 1
+        
+    @staticmethod
     def selu(x):
         a = 1.6733
         y = 1.0507
