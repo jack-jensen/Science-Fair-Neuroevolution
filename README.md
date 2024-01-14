@@ -52,7 +52,7 @@ Then, I created some files to store the html for the dashboard and a file that c
 
 
 
-## January 10, 2024
+## January 10, 2024 *Note: Files for this date were regrettingly forgotton to upload*
 ### 5:30 pm
 
 In the past few days, I have been researching how to make a dashboard for my project. I found an extremely helpful [video](https://www.youtube.com/watch?v=h18LMskRNMA&list=PLvOT6zBnJyYFqKp4dBCS1aZ8Nzbll7qre&index=6), and ended up using code from the video in my project. The files ResponseBuilder.py, ResponseParser.py, and WebConnection.py are all completely not my code. I also used their code as a framwork for main.py. This code is only used for communicating with the webserver. All project-specific code is my own.
@@ -101,3 +101,91 @@ I moved the motor and genome classes to their own files, and I added some files 
 
 > This code is based on the cited source in the project proposal
 > It initiates all the genomes state. Later, I will add the code that runs the genome objects. After, the genomes are ranked based on how well their fitness score is. I have added some notes, but currently the plan is to eliminate a certain number of genomes. Then I am currently working on add the crossbreeding. Right now all it does is randomly select two 'parent' genomes.
+> 
+
+## January 13, 2024
+### 8:45 pm
+
+I got a lot of code done today. Most notably would be the new mutations file. This morning, I filled the mutations file with 9 mutations. They include the mutations to add nodes, connections, and gaters; the mutations to modify weights, biases, and activation functions (In the cited source on the project proposal, the activation functions are commonly referred to as squashes. I refer to them in my code as activation functions.); and the mutations to remove nodes, connections, and gaters.
+
+I also finished the cross-breeding:
+
+         while len(newGenomes) < numberOfGenomes:
+
+
+            while parent1 != parent2:
+                parent1 = random.choice(rankedGenomes)
+                parent2 = random.choice(rankedGenomes)
+
+            offspring = Genome(len(newGenomes), parent1, parent2)
+            
+            
+            if parent1.fitness > parent2.fitness:
+                offspring.nodeSize = parent1.nodeSize
+                offspring.connectionSize = parent1.connectionSize
+
+            elif parent2.fitness > parent1.fitness:
+                offspring.nodeSize = parent2.nodeSize
+                offspring.connectionSize = parent2.connectionSize
+
+            else:
+                #Possibly make it so that the nodeSize is between
+                # the two parent's sizes instead of one or the other
+                parentsList= [parent1, parent2]
+                offspring.nodeSize = random.choice(parentsList).nodeSize
+
+
+            i = 0
+            while i < offspring.nodeSize:
+                # Make output nodeSize  and connectionSize variable in genome class WRONG WRONG WRONG use .len() in the future
+                if i < offspring.nodeSize - parent1.outputSize:
+                    if i > parent1.nodeSize - parent1.outputSize:
+                        node = parent2.nodes[i]
+                    
+                    elif i > parent2.nodeSize - parent1.outputSize:
+                        node = parent1.nodes[i]
+
+                    else:
+                        choices = [parent1.nodes[i], parent2.nodes[i]]
+                        node = random.choice(choices)
+
+                else:
+                    choices = [parent1.nodes[parent1.nodeSize + i - offspring.nodeSize],
+                               parent2.nodes[parent2.nodeSize + i - offspring.nodeSize]]
+                    node = random.choice(choices)
+
+                offspring.nodes[i] = node
+
+                i += 1
+
+
+            i = 0
+            while i < offspring.connectionSize:
+                if i > parent1.connectionSize:
+                    connection = parent2.connections[i]
+
+                elif i > parent2.connectionSize:
+                    connection = parent1.connections[i]
+
+                else:
+                    choices = [parent1.connections[i], parent2.connections[i]]
+                    connection = random.choice(choices)
+
+                offspring.connections[i] = connection
+
+            
+            #Sprinkle mutations
+            number = random.randint(0, 100)
+
+            if number < mutationRate:
+                mutation = random.choice(listOfMutations)
+                mutation(offspring)
+                
+            
+                
+            newGenomes.append(offspring)
+
+>This code is in a loop that creates more offspring until the required amount is met. First, it randomly assigns two parents. Then, it initiates the offspring genome. Then it determines the size of the offspring: the parent with the highest fitness passes on the size. After, it assigns the nodes and connections. Finally, it adds mutations and adds the new genome to the new genomes list.
+>
+I tweaked some things in the genome class. The most notable are the new methods: findOutgoingConnections, findIncomingConnections, and areNodesConnected. The names are pretty self-expanatory. They all take nodes as parameters.
+I am nearing the final stretch of the coding process.
