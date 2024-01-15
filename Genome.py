@@ -6,38 +6,38 @@ class Genome:
 
     class Node:
         def __init__(self, type, index):
+            self.listOfActivationFunctions = [af.binaryStep, af.linear, af.sigmoid, af.tanh,
+                                af.relu, af.softsign, af.gaussian, af.sinusoid,
+                               af.bentIdentity, af.bipolarStep, af.hardTanh,
+                               af.selu]
             self.type = type
-            self.index = index
+            self.nodeIndex = index
             self.activation = 0
             self.state = 0
-            self.bias = 0
-            self.activationFunction = af.linear
+            self.bias = random.random()
+            self.activationFunction = random.choice(self.listOfActivationFunctions)
 
 
             
     class Connection:
-        def __init__(self, fromIndex, toIndex):
+        def __init__(self, fromIndex, toIndex, selfConnection=False):
             self.fromIndex = fromIndex
             self.toIndex = toIndex
-            self.selfConnection = False
-            self.weight = 0
+            self.selfConnection = selfConnection
+            self.weight = random.random()
             self.gater = -1
         
 
     def __init__(self, identificationNumber, parent1, parent2):
-        #Create the node array
         self.identificationNumber = identificationNumber
         self.parents = [parent1, parent2]
         self.initialIndex = 0
-        self.numberOfInputs = 5 #Random number
-        self.numberOfOutputs = 5 #Random number
+        self.numberOfInputs = 4 #The angle of the motors
+        self.numberOfOutputs = 4 #The increment that the angle changes for each motor
         self.initialNumberOfConnections = 10 #Random number
         self.nodes = []
         self.connections = []
-        self.listOfActivationFunctions = [af.binaryStep, af.linear, af.sigmoid, af.tanh,
-                                af.relu, af.softsign, af.gaussian, af.sinusoid,
-                               af.bentIdentity, af.bipolarStep, af.hardTanh,
-                               af.selu]
+        
 
         #Initiate the input and output nodes
         for i in range(self.numberOfInputs):
@@ -46,38 +46,27 @@ class Genome:
             self.nodes.append(self.Node("output", self.indexCalculator()))
 
         self.size = len(self.nodes)
+        self.nodes.sort(key=lambda item:item.nodeIndex)
 
-        #Initiate the connections - Making sure to mark self-connections
-        for i in range(self.initialNumberOfConnections):
-            pairs = []
-            for node1 in self.nodes:
+        #initiate the connections
+        for node1 in self.nodes:
+            if node1 == 'input':
                 for node2 in self.nodes:
-                    if node1.isNotConnectedTo(node2):
-                        pairs.append([node1, node2])
-
-            pair = random.choice(pairs)
-
-            self.connections[i] = self.Connection(pair[0], pair[1])
-            
-
-            if self.connections[i].fromIndex == self.connections[i].toIndex:
-                self.connections[i].selfConnection = True
+                    if node2 == "output":
+                        self.connections.append(self.Connection(node1.nodeIndex, node2.nodeIndex))
 
 
-
-
-
-    def evaluateGenome(self, initialInputs, iterationsAllowed, waitTime):
-        self.nodes.sort(key=lambda item:item.index)
+    def runGenome(self, inputs):
+        self.nodes.sort(key=lambda item:item.nodeIndex)
         output = []
         
         for node in self.nodes:
             if node.type == "input":
-                node.activation = initialInputs[node.index]
+                node.activation = inputs[node.nodeIndex]
             else:
                 #Check bias stuff later - it looks fishy
                 for connection in self.connections:
-                    if connection.toIndex == node.index:
+                    if connection.toIndex == node.nodeIndex:
                         if connection.selfConnection:
                             node.state += connection.weight * node.state * self.nodes[connection.gater].activation + node.bias
                         else:
@@ -99,7 +88,7 @@ class Genome:
     def findIncomingConnections(self, node):
         incomingConnections = []
         for connection in self.connections:
-            if connection.toIndex == node.index:
+            if connection.toIndex == node.nodeIndex:
                 incomingConnections.append(connection)
 
         return incomingConnections
@@ -107,7 +96,7 @@ class Genome:
     def findOutgoingConnections(self, node):
         outgoingConnections = []
         for connection in self.connections:
-            if connection.fromIndex == node.index:
+            if connection.fromIndex == node.nodeIndex:
                 outgoingConnections.append(connection)
 
         return outgoingConnections
@@ -130,7 +119,3 @@ class Genome:
                     return True
                 
         return False
-
-
-        
-

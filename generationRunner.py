@@ -2,6 +2,7 @@ import random
 from Genome import Genome
 from mutations import Mutations as M
 import pickle
+from main import inputs
 #After each indivitaul run is complete, ask if they need to pause
 
 # Note from first cited source: Eliminate the least successful genomes
@@ -10,49 +11,62 @@ import pickle
 # cross-breed
 
 class generationRunner:
-    def __init__(self, genome, numberOfGenomes, percentageToDrop, mutationRate, genomesParameter:list, firstTime=False):
-        listOfMutations = [M.addNodeMutation, M.addConnectionMutation, M.addGateMutation,
+    def __init__(self, genome, numberOfGenomes, percentageToDrop, mutationRate, genomes:list, firstTime=False):
+        self.listOfMutations = [M.addNodeMutation, M.addConnectionMutation, M.addGateMutation,
                            M.modifyWeightMutation,M.modifyBiasMutation, M.modifyActivationFunctionMutation,
                            M.removeNodeMutation, M.removeConnectionMutation, M.removeGateMutation]
         
-        genomes = []
-        if firstTime:
-            for i in range(numberOfGenomes):
-                genomes.append(genome(i, "Jack Jensen", "Jack Jensen"))
+        
+
+        self.percentageToDrop = percentageToDrop
+        self.mutationRate = mutationRate
+        self.numberOfGenomes = numberOfGenomes
+        self.oldGenomes = genomes
+        self.genomeClass = genome
+        self.firstTime = firstTime
+
+        self.newGenomes = []
+        self.genomes = []
+        
+
+        if self.firstTime:
+            for i in range(self.numberOfGenomes):
+                self.genomes.append(self.genomeClass(i, "Jack Jensen", "Jack Jensen"))
         else:
-            if len(genomes) != numberOfGenomes:
+            if len(self.genomes) != self.numberOfGenomes:
                 raise RuntimeError("Number of genomes provided does not match number of genomes needed")
             else:
-                for i in range(numberOfGenomes):
-                    genomes[i] = genomesParameter[i]
-
-
-
-        newGenomes = []
-    
-        rankedGenomes = genomes.sort(key=lambda item:item.fitness)
-
-        #Save rankedGenomes list - with all the class genome objects
+                for i in range(self.numberOfGenomes):
+                    self.genomes[i] = self.oldGenomes[i]
         
-        pickledGenerationData = pickle.dumps(rankedGenomes)
+        self.genomes.sort(key=lambda item:item.identificationNumber)
+
+    
+    def runOneGenomeOnce(self, genome, inputs):
+        return genome.runGenome(inputs)
+    
+    def afterGenomesRan(self):
+        
+
+        self.rankedGenomes = self.genomes.sort(key=lambda item:item.fitness)
+
+        self.pickledGenerationData = pickle.dumps(self.rankedGenomes)
 
 
-        #You may not have to eliminate the genomes. Reproduce all the genomes randomly, then the last
-        # generation 'dies'.
-        numberToEliminate = round(numberOfGenomes / percentageToDrop)
+        numberToEliminate = round(self.numberOfGenomes / self.percentageToDrop)
 
         for i in range(numberToEliminate):
-            rankedGenomes.pop()
+            self.rankedGenomes.pop()
 
         #Cross-breeding
-        while len(newGenomes) < numberOfGenomes:
+        while len(self.newGenomes) < self.numberOfGenomes:
 
 
             while parent1 != parent2:
-                parent1 = random.choice(rankedGenomes)
-                parent2 = random.choice(rankedGenomes)
+                parent1 = random.choice(self.rankedGenomes)
+                parent2 = random.choice(self.rankedGenomes)
 
-            offspring = Genome(len(newGenomes), parent1, parent2)
+            offspring = Genome(len(self.newGenomes), parent1, parent2)
             
             
             if parent1.fitness > parent2.fitness:
@@ -112,25 +126,15 @@ class generationRunner:
             #Sprinkle mutations
             number = random.randint(0, 100)
 
-            if number < mutationRate:
-                mutation = random.choice(listOfMutations)
+            if number < self.mutationRate:
+                mutation = random.choice(self.listOfMutations)
                 mutation(offspring)
                 
             
                 
-            newGenomes.append(offspring)
+            self.newGenomes.append(offspring)
                 
 
         #Once everything is done, this is what the class outputs
-        return newGenomes, pickledGenerationData
-
-
-
-
-
-
-x = generationRunner(Genome,100,5,5,firstTime=True, genomesParameter=[])
-
-
-
+        return self.newGenomes, self.pickledGenerationData
 

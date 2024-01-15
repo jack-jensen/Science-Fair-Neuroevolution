@@ -1,10 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Science</title>
+    <title id="title">Science</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="background-color:aqua">
-    <h1 style="text-align: center;">Science Fair Neuroevolution Project</h1>
-    <p style="text-align: center;">Hello!</p>
+<body>
+    <h1>Science Fair Neuroevolution Project</h1>
+    
+    
+
+    <div id="formDiv">
+        <form id="form">
+            <label for="genomeFile">
+                <p>Enter Pickle File Containing Genomes</p>
+                <input type="file" name="genomeFile" id="genomeFile">
+            </label>
+            <label for="submitButton">
+                <input type="submit">
+            </label>
+        </form>
+    </div>
+
+    <div id="green">
+        <p>Everything is going as planned. Verify the automation is in the correct location and give the green light!</p>
+        <button onclick="greenLight()">Green Light!</button>
+    </div>
+
+    <!-- The following div controlls the fitness. I have only added the distance for sake of simplicity. In the project proposal, it also has some
+    negative fitness values, but right now my current mindset is that I don't care if it moves in a straight line as long as it can move in the 
+    first place. Feel free to change this in the future.-->
+    <div>
+        <form id="fitnessScorer">
+            <fieldset>
+                <legend>Fitness Scorer</legend>
+                <label for="distance">
+                    <input type="number" value="distance" id="distance">
+                </label>
+                <label for="submitButton">
+                    <input type="submit" value="Submit">
+                </label>
+            </fieldset>
+           
+        </form>
+    </div>
+
+
+    <div id="startButton">
+        <button onclick="start()">Start</button>
+    </div>
+    
+
+
+
+    <script src="index.js"></script>
 </body>
 </html>

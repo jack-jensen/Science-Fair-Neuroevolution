@@ -1,0 +1,24 @@
+body {
+    background-color: aquamarine;
+}
+
+h1, h2 {
+    text-align:center;
+}
+
+
+#fitnessScorer {
+    width:fit-content;
+    text-align: center;
+    margin: auto;
+}
+
+#formDiv {
+    text-align: center;
+    width:fit-content;
+    margin:auto;
+}
+
+#startButton {
+    text-align: center;
+}

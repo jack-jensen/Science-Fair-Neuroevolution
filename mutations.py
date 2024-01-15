@@ -14,19 +14,23 @@ class Mutations:
         node = genome.Node("hidden", index)
 
         for node in genome.nodes:
-            if node.index >= index:
+            if node.nodeIndex >= index:
                 incomingConnections = genome.findIncomingConnections(node)
                 outgoingConnections = genome.findOutgoingConnections(node)
                 for incomingConnection in incomingConnections:
                     incomingConnection.toIndex += 1
+                    if connection.gater >= index:
+                        connection.gater += 1
                 for outgoingConnection in outgoingConnections:
                     outgoingConnection.fromIndex += 1
+                    if connection.gater >= index:
+                        connection.gater += 1
 
-                node.index += 1
+                node.nodeIndex += 1
 
 
         genome.nodes.append(node)
-        genome.nodes.sort(key=lambda node:node.index)
+        genome.nodes.sort(key=lambda node:node.nodeIndex)
         genome.connections.remove(connection)
 
         newConnection1 = genome.Connection(connection.fromIndex, index)
@@ -49,12 +53,17 @@ class Mutations:
 
         pair = random.choice(pairs)
 
-        genome.connections.append(genome.Connection(pair[0], pair[1]))
+        if pair[0] == pair[1]:
+            selfConnection = True
+        else:
+            selfConnection = False
+
+        genome.connections.append(genome.Connection(pair[0], pair[1], selfConnection))
 
     @staticmethod
     def addGateMutation(genome):
         connection = random.choice(genome.connections)
-        connection.gater = random.choice(genome.nodes).index
+        connection.gater = random.choice(genome.nodes).nodeIndex
 
     @staticmethod
     def modifyWeightMutation(genome, min=-1, max=1):
@@ -96,7 +105,7 @@ class Mutations:
         gaters = []
 
         for connection in genome.findIncomingConnections(node):
-            if connection.fromIndex != node.index:
+            if connection.fromIndex != node.nodeIndex:
                 sourceNodes.append(genome.nodes[connection.fromIndex])
                 if connection.gater != -1:
                     gaters.append(connection.gater)
@@ -104,7 +113,7 @@ class Mutations:
         targetNodes = []
 
         for connection in genome.findOutgoingConnections(node):
-            if connection.toIndex != node.index:
+            if connection.toIndex != node.nodeIndex:
                 targetNodes.append(genome.nodes[connection.toIndex])
                 if connection.gater != -1:
                     gaters.append(connection.gater)
@@ -127,7 +136,7 @@ class Mutations:
             newConnections.remove(randomConnection)
 
         for connection in genome.connections:
-            if connection.gater == node.index:
+            if connection.gater == node.nodeIndex:
                 connection.gater = -1
         
         genome.nodes.remove(node)
@@ -155,10 +164,4 @@ class Mutations:
         connection.gater = -1
         
 
-
-
-
-
-
-
-
+print(random.random())
