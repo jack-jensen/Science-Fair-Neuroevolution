@@ -189,3 +189,10 @@ I also finished the cross-breeding:
 >
 I tweaked some things in the genome class. The most notable are the new methods: findOutgoingConnections, findIncomingConnections, and areNodesConnected. The names are pretty self-expanatory. They all take nodes as parameters.
 I am nearing the final stretch of the coding process.
+
+
+
+## January 14, 2024
+### 8:30 pm
+
+The most notable thing I worked on today was the client-side of the project. I improved on the HTML file, as well as added a javascript file and a css file. It is not completely done, but progress is being made. I also made some tweaks. I am trying to figure out how to make the generationRunner work better. My vision is that there is an instance for each generation. Tomorrow, I am going to test if the http request handler works.
