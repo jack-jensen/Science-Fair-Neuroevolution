@@ -200,4 +200,4 @@ The most notable thing I worked on today was the client-side of the project. I i
 ## January 15-17, 2024
 ### 3:30 pm
 
-Over the past few days, I am altered the code and tested it with the raspberry pi pico. A big change would be to the main.py file. Previously, it was using asyncronous programming and used both cores. Now I realise that those are not nessacery and simplified it. There is a line of blocking code, but it shouldn't matter. 
+Over the past few days, I am altered the code and tested it with the raspberry pi pico. A big change would be to the main.py file. Previously, it was using asyncronous programming and used both cores. Now I realise that those are not nessacery and simplified it. There is a line of blocking code, but it shouldn't matter. The motor class still exists, though I am getting the feeling that the IoHandler file will take over in somepoint in the future. Don't really know why I uploaded the dummyCode file. The generationRunner file added a new method. It determines which gemone should be ran. Also, the runOneGenome method got upgraded.
