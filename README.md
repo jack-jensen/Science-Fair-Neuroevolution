@@ -196,3 +196,8 @@ I am nearing the final stretch of the coding process.
 ### 8:30 pm
 
 The most notable thing I worked on today was the client-side of the project. I improved on the HTML file, as well as added a javascript file and a css file. It is not completely done, but progress is being made. I also made some tweaks. I am trying to figure out how to make the generationRunner work better. My vision is that there is an instance for each generation. Tomorrow, I am going to test if the http request handler works.
+
+## January 15-17, 2024
+### 3:30 pm
+
+Over the past few days, I am altered the code and tested it with the raspberry pi pico. A big change would be to the main.py file. Previously, it was using asyncronous programming and used both cores. Now I realise that those are not nessacery and simplified it. There is a line of blocking code, but it shouldn't matter. 
