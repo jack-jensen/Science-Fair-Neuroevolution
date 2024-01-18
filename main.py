@@ -1,100 +1,125 @@
-# POSTER BOARD IDEA: ONE SIDE IS HARDWARE AND THE OTHER IS SOFTWARE. CENTER IS ABSTRAcT
+# non blocking web server using second core
 
-#ADD GATERS TO THE CONNECTIONS
-
-
-#USE PICKLE TO SAVE OBJECTS TO FILE FOR LATER RETRIEVAL
-
-import uasyncio
-import _thread
-from Genome import Genome
-from WebConnection import WiFiConnection
-from generationRunner import generationRunner
+import utime
+import socket
 from RequestParser import RequestParser
+import _thread
 from ResponseBuilder import ResponseBuilder
+from WebConnection import WiFiConnection
 from IoHandler import IoHandler
+import random
+import mip
+from generationRunner import generationRunner
+from Genome import unPickleGenomeFile, Genome
 
+# connect to WiFi
 if not WiFiConnection.start_station_mode(True):
     raise RuntimeError('network connection failed')
 
-async def handle_request(reader, writer):
-    try:
-        raw_request = await reader.read(2048)
-
-        request = RequestParser(raw_request)
-
-        response_builder = ResponseBuilder()
-
-        if request.url_match("/api"):
-            action = request.get_action()
-            if action == "initiateProcess":
-                message = "You have initiated the start-up sequence. Place automation in the center of the degree map"
-                response_builder.set_body(message)
-
-            elif action == "greenLight":
-                #Figure out how to use async with this, as the process will most likely take a while
-
-                newGenomes, generationData = generationRunner()
+mip.install("pickle")
+import pickle
 
 
-                response_builder.set_body_from_dict(generationData)
+def beginProgram():
 
-            elif action == "abandonShip":
-                #halt robot
-                pass
-            elif action == "pause":
-                #Figure out how to pause the automation
-                pass
-            else:
-                #Unknown action
-                actions = ["initiateProcess", "greenLight", "abandonShip", "pause"]
-                raise RuntimeError(f"ERROR!!! Called for unknown action. The avaliable actions are {actions}")
-            
-        
-        else:
-            #This probably means that they just visted the webserver from the browser
-            response_builder.serve_static_file(request.url)
+    # Open socket
+    addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
+    s = socket.socket()
+    s.bind(addr)
+    s.listen(1)
 
-        response_builder.build_response()
-        writer.write(response_builder.response)
-        await writer.drain()
-        await writer.wait_closed()
+    print('listening on', addr)
 
-            
-    except OSError as e:
-        print('connection error ' + str(e.errno) + " " + str(e))
-
-
-
-async def main():
-    print('Setting up webserver...')
-    server = uasyncio.start_server(handle_request, "0.0.0.0", 80)
-    uasyncio.create_task(server)
-
-    # main async loop on first core
-    # just pulse the red led
-    counter = 0
+    # main web server loop
     while True:
-        if counter % 500 == 0:
-            IoHandler.toggle_pico_led()
-        counter += 1
-        await uasyncio.sleep(0)
- 
+        cl = False
+        try:
+            # wait for HTTP request
+            cl, addr = s.accept()
+            # print('client connected from', addr)
+            raw_request = cl.recv(1024)
+
+            # parse HTTP request
+            request = RequestParser(raw_request)
+            #print(request.method, request.url, request.get_action())
+
+            # Prepare to build HTTP response
+            response_builder = ResponseBuilder()
+
+            # filter out api request
+            if request.url_match("/api"):
+                # read api action requested
+                action = request.get_action()
+                if action == 'sendPickledData':
+                    rawFile = request.data()["file"]
+                    firstTime = request.data()["firstTime"]
+                    if not firstTime == "True":
+                        file = pickle.loads()
+                        genomes = unPickleGenomeFile(file)
+                    else:
+                        genomes = []
+
+                    response_builder.set_body("Finished")
+
+    
+                elif action == 'sendHyperParameters':
+                    mutationRate = int(request.data()["mutationRate"])
+                    numberOfGenomes = int(request.data()["numberOfGenomes"])
+                    percentageToDrop = int(request.data()["percentageToDrop"])
 
 
-def secondThreadMethod():
-    pass
+                    generation = generationRunner(Genome, numberOfGenomes, percentageToDrop, mutationRate, genomes, firstTime)
 
+                elif action == 'runOneGenome':
+                    nextGenome = generation.findNextGenome()
+                    if nextGenome != None:
+                        outputData = generation.runOneGenome(nextGenome)
+                        postData = {
+                            "data": outputData,
+                            "identificationNumber": nextGenome.identificationNumber
+                        }
 
-# start neopixel scrolling loop on second processor
-second_thread = _thread.start_new_thread(secondThreadMethod, ())
+                        response_builder.set_body_from_dict(postData)
+                    else:
+                        generation.afterGenomesRan()
+                        response_builder.set_body("No more Genomes")
 
-try:
-    # start asyncio tasks on first core
-    uasyncio.run(main())
-finally:
-    print("running finally block")
-    uasyncio.new_event_loop()
+                elif action == "sendFitnessData":
+                    distance = request.data()["distance"]
+                    identificationNumber = int(request.data()["identificationNumber"])
+
+                    for genome in generation.genomes:
+                        if genome.identificationNumber == identificationNumber:
+                            fitness = genome.calculateFitness(distance)
+                            genome.fitness = fitness
+                            break
+
+                    response_builder.set_body("Finished")
+
+                else:
+                    # unknown action - send back not found error status
+                    response_builder.set_status(404)
+
+            # try to serve static file
+            else:
+                # return file if valid
+                response_builder.serve_static_file(request.url, "/api_index.html")
+
+            # build the HTTP response
+            response_builder.build_response()
+            # return response to client
+            sent = cl.write(response_builder.response)
+            cl.close()
+
+        except OSError as e:
+            cl.close()
+            print('connection closed')
+
+# main control loop
+
+if __name__ == "main":
+    beginProgram()
+
 
 
 

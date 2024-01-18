@@ -1,8 +1,9 @@
 import random
 from Genome import Genome
-from mutations import Mutations as M
+from Mutations import Mutations as M
 import pickle
-from main import inputs
+
+import IoHandler
 #After each indivitaul run is complete, ask if they need to pause
 
 # Note from first cited source: Eliminate the least successful genomes
@@ -11,7 +12,7 @@ from main import inputs
 # cross-breed
 
 class generationRunner:
-    def __init__(self, genome, numberOfGenomes, percentageToDrop, mutationRate, genomes:list, firstTime=False):
+    def __init__(self, genome, numberOfGenomes, percentageToDrop, mutationRate, genomes, firstTime=False):
         self.listOfMutations = [M.addNodeMutation, M.addConnectionMutation, M.addGateMutation,
                            M.modifyWeightMutation,M.modifyBiasMutation, M.modifyActivationFunctionMutation,
                            M.removeNodeMutation, M.removeConnectionMutation, M.removeGateMutation]
@@ -41,9 +42,26 @@ class generationRunner:
         
         self.genomes.sort(key=lambda item:item.identificationNumber)
 
+    def findNextGenome(self):
+        for genome in self.genomes:
+            if genome.fitness == None:
+                return genome
+        return None
+
+
     
-    def runOneGenomeOnce(self, genome, inputs):
-        return genome.runGenome(inputs)
+    def runOneGenome(self, genome, iterations):
+        outputData = []
+        for i in range(iterations):
+            inputs = IoHandler.getMotorAngles()
+            outputs = genome.runGenome(inputs)
+            outputData.append(outputs)
+            IoHandler.runMotors(outputs)
+
+        return outputData
+
+
+        
     
     def afterGenomesRan(self):
         

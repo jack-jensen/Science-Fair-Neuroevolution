@@ -1,5 +1,6 @@
 import random
-from activations import activationFunctions as af
+from Activations import activationFunctions as af
+import pickle
 
 
 class Genome:
@@ -34,7 +35,7 @@ class Genome:
         self.initialIndex = 0
         self.numberOfInputs = 4 #The angle of the motors
         self.numberOfOutputs = 4 #The increment that the angle changes for each motor
-        self.initialNumberOfConnections = 10 #Random number
+
         self.nodes = []
         self.connections = []
         
@@ -119,3 +120,22 @@ class Genome:
                     return True
                 
         return False
+    
+    def calculateFitness(self, distance, distanceWeight=10):
+        weightedDistance = distance * distanceWeight
+        fitness = weightedDistance
+        return fitness
+
+
+
+
+def unPickleGenomeFile(fileName):
+    with open(fileName, "rb") as file:
+        raw_lines = file.readlines()
+        genomes = []
+        for raw_line in raw_lines:
+            line = pickle.loads(raw_line)
+            genomes.append(line)
+        genomes.sort(key=lambda genome:genome.identificationNumber)
+        
+    return genomes
