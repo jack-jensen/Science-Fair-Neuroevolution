@@ -202,3 +202,12 @@ The most notable thing I worked on today was the client-side of the project. I i
 
 Over the past few days, I am altered the code and tested it with the raspberry pi pico. A big change would be to the main.py file. Previously, it was using asyncronous programming and used both cores. Now I realise that those are not nessacery and simplified it. There is a line of blocking code, but it shouldn't matter. The motor class still exists, though I am getting the feeling that the IoHandler file will take over in somepoint in the future. Don't really know why I uploaded the dummyCode file. The generationRunner file added a new method. It determines which gemone should be ran. Also, the runOneGenome method got upgraded.
 Also, I had to reset my pico because I put a while loop inside a file named main. It is annoying, because I lost some files. I uploaded the files again, but some changes were lost.
+
+## January 20-ish, 2024
+
+Technically I am writing this on 2/2/2024, but I forgot to add that I finished the javascript file. It handled requests on the client side and interacted with the webpage accordingly.
+
+## Febrary 2, 2024
+### 5:00 pm
+
+Over the past few days, I have been gathering parts to begin the constuction of the physical model. I have been having some trouble moving the motor until today. I mixed up the wires! Today I should also upload more files.
