@@ -211,3 +211,8 @@ Technically I am writing this on 2/2/2024, but I forgot to add that I finished t
 ### 5:00 pm
 
 Over the past few days, I have been gathering parts to begin the constuction of the physical model. I have been having some trouble moving the motor until today. I mixed up the wires! Today I should also upload more files.
+
+## Febrary 4, 2024
+### 10:30 am
+
+I spent yesterday perfecting the 3d model for the bot. The annoying part was making sure it fit inside the printer. I found [this](https://www.formware.co/OnlineStlRepair) website incredibly helpful for repairing the stl file (making sure that the file can be printed accurately). I left the printer on overnight and it finished printing at around 9:15 am. 
