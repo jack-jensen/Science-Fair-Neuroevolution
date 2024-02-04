@@ -215,4 +215,9 @@ Over the past few days, I have been gathering parts to begin the constuction of 
 ## Febrary 4, 2024
 ### 10:30 am
 
-I spent yesterday perfecting the 3d model for the bot. The annoying part was making sure it fit inside the printer. I found [this](https://www.formware.co/OnlineStlRepair) website incredibly helpful for repairing the stl file (making sure that the file can be printed accurately). I left the printer on overnight and it finished printing at around 9:15 am. [image](https://github.com/Georgie-design/Science-Fair-Neuroevolution/blob/main/BotPhotos/F2D33B98-DA3E-44E5-A37D-0B0055AA6B29.jpeg)
+I spent yesterday perfecting the 3d model for the bot. The annoying part was making sure it fit inside the printer. I found [this](https://www.formware.co/OnlineStlRepair) website incredibly helpful for repairing the stl file (making sure that the file can be printed accurately). I left the printer on overnight and it finished printing at around 9:15 am. ![F2D33B98-DA3E-44E5-A37D-0B0055AA6B29](https://github.com/Georgie-design/Science-Fair-Neuroevolution/assets/125774486/94ac5616-c7ad-488d-96ec-f84be88a0549)
+> Currently it has supports, and weighs 151 grams.
+![image]()
+
+
+
