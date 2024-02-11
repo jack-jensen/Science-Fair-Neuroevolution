@@ -225,4 +225,11 @@ I spent yesterday perfecting the 3d model for the bot. The annoying part was mak
 
 >![image](https://github.com/Georgie-design/Science-Fair-Neuroevolution/blob/main/BotPhotos/03C864BF-7783-4051-9585-EC5CA1FD7C0B.jpeg)
 > With some circuitry added, problems began to emerge. The battery case holders were not wide enough and the towers that were supposed to be holding them in were to fragile (in the photo, most have broken off). The breadboard space was a tight squeeze, so that will need to be widened. The motors fit perfectly. I might also consider thickening the walls to ensure that it will not break. And finally, I will probably make the corrdinate holes on the side smaller for more percision when measuring the distance it has traveled.
+>
+
+
+## February 10, 2024
+### 10:00 pm
+
+I just finished the revised design. It will take 17 hours to print, so I am getting it ready over night. Best of luck.
 
