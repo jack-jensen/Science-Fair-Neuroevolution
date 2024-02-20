@@ -233,3 +233,9 @@ I spent yesterday perfecting the 3d model for the bot. The annoying part was mak
 
 I just finished the revised design. It will take 17 hours to print, so I am getting it ready over night. Best of luck.
 
+## February 19, 2024
+### 8:30 pm
+
+It has been a while since the last check-in. I only worked on hardware during this time. The new design has worked perfectly (however, I noted that the space for the breadboard was hard to get to. If I am ever going to make something like this again, I should remember to put the breadboard/circuitry on the top for better access). I have found [this](https://how2electronics.com/control-stepper-motor-with-a4988-raspberry-pi-pico/) circuit diagram immensely helpful. It only connects to 1 motor, so I quadrupled the design on my breadboard. At some point, I will add my own diagram.
+The struggle has been checking for loose wires and making sure everything is in the right spot, and as of right now everything appears in order. I will be ramping up my project time in order to meet the upcoming deadline.
+
