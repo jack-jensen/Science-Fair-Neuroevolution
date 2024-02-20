@@ -242,3 +242,6 @@ The struggle has been checking for loose wires and making sure everything is in 
 ![image](https://github.com/Georgie-design/Science-Fair-Neuroevolution/blob/main/BotPhotos/E72B43DE-190F-484F-9BDB-C8BFB15E7C85.jpeg)
 > My chaotic workstation
 
+![image](https://github.com/Georgie-design/Science-Fair-Neuroevolution/blob/main/BotPhotos/A1DB7D24-E681-4226-94B5-F41215435FC3.jpeg)
+> The new design - supports still on
+
