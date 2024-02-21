@@ -93,6 +93,7 @@ class Mutations:
         node.activationFunction = newActivationFunction
 
     @staticmethod
+    # Note: Verify that the node and connection indices change down
     def removeNodeMutation(genome):
         hiddenNodes = []
         for node in genome.nodes:

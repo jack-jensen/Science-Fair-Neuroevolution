@@ -1,9 +1,11 @@
+print(1 % 200)
 import random
 from Genome import Genome
 from Mutations import Mutations as M
 import pickle
+from Motor import stepper1, stepper2, stepper3, stepper4
 
-import IoHandler
+
 #After each indivitaul run is complete, ask if they need to pause
 
 # Note from first cited source: Eliminate the least successful genomes
@@ -53,10 +55,21 @@ class generationRunner:
     def runOneGenome(self, genome, iterations):
         outputData = []
         for i in range(iterations):
-            inputs = IoHandler.getMotorAngles()
+            inputs = [stepper1.position, stepper2.position, stepper3.position, stepper4.position]
             outputs = genome.runGenome(inputs)
             outputData.append(outputs)
-            IoHandler.runMotors(outputs)
+
+            stepper1.move_to(round(abs(outputs[0]) % 200))
+            stepper2.move_to(round(abs(outputs[1]) % 200))
+            stepper3.move_to(round(abs(outputs[2]) % 200))
+            stepper4.move_to(round(abs(outputs[3]) % 200))
+
+        stepper1.move_to(0)
+        stepper2.move_to(0)
+        stepper3.move_to(0)
+        stepper4.move_to(0)
+
+        
 
         return outputData
 
@@ -155,4 +168,5 @@ class generationRunner:
 
         #Once everything is done, this is what the class outputs
         return self.newGenomes, self.pickledGenerationData
+
 

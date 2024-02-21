@@ -7,51 +7,101 @@
 <body>
     <h1>Science Fair Neuroevolution Project</h1>
     
+    <!-- Start Button -->
+    <div id="startButton">
+        <button onclick="start()">Start</button>
+    </div>
     
-
-    <div id="formDiv">
-        <form id="form">
-            <label for="genomeFile">
-                <p>Enter Pickle File Containing Genomes</p>
+    <!-- Pickle Form Div -->
+    <div class="formDiv" id="pickleFormDiv">
+        <form id="pickleForm">
+            <fieldset>
+                <legend>Pickle Form</legend>
+                <label for="genomeFile"><p>Enter Pickle File Containing Genomes</p></label>
+                <br>
                 <input type="file" name="genomeFile" id="genomeFile">
-            </label>
-            <label for="submitButton">
-                <input type="submit">
-            </label>
+                <br>
+                <label for="numberOfGenomesExpected">Number of genomes expected</label>
+                <br>
+                <input type="number" name="numberOfGenomesExpected" id="numberOfGenomesExpected" value="0">
+                <br>
+                <label for="firstTime">Is this your first time?</label>
+                <br>
+                <input type="text" name="firstTime" id="firstTime" value="y or n">
+                <br>
+                <label for="submitButton"></label>
+                <br>
+                <input type="submit" name="submitButton">
+            </fieldset>
         </form>
     </div>
 
-    <div id="green">
+    <!-- Hyperparameters Form Div -->
+    <div class="formDiv" id="hyperparametersFormDiv">
+        <form action="" id="hyperparametersForm">
+            <fieldset>
+                <legend>Hyperparameters</legend>
+                <label for="mutationRate">Enter Mutation Rate</label>
+                <br>
+                <input type="number" name="mutationRate" value="20" id="mutationRate">
+                <br>
+                <label for="percentageToDrop">Enter Percentage of Genomes to Eliminate</label>
+                <br>
+                <input type="number" name="percentageToDrop" value="50" id="percentageToDrop">
+                <br>
+                <label for="iterationsAllowed">Enter Iterations Allowed for Each Genome</label>
+                <br>
+                <input type="number" name="iterationsAllowed" id="iterationsAllowed">
+                <br>
+
+                <div id="numberOfGenomesDiv">
+                    <label for="numberOfGenomes">Enter Number of Genomes</label>
+                    <br>
+                    <input type="number" name="numberOfGenomes" value="75" id="numberOfGenomes">
+                    <br>
+                </div>
+                
+                <label for="submitButton"></label>
+                <br>
+                <input type="submit" name="submitButton">
+            </fieldset>
+        </form>
+
+    </div>
+
+    <!-- Greenlight Div -->
+    <div id="runOneGenomeDiv">
         <p>Everything is going as planned. Verify the automation is in the correct location and give the green light!</p>
-        <button onclick="greenLight()">Green Light!</button>
+        <button onclick="runOneGenome()">Run One Genome</button>
     </div>
 
     <!-- The following div controlls the fitness. I have only added the distance for sake of simplicity. In the project proposal, it also has some
     negative fitness values, but right now my current mindset is that I don't care if it moves in a straight line as long as it can move in the 
     first place. Feel free to change this in the future.-->
-    <div>
-        <form id="fitnessScorer">
+
+    <!-- Fitness Form Div -->
+    <div class="formDiv" id="fitnessFormDiv">
+        <form id="fitnessForm">
             <fieldset>
                 <legend>Fitness Scorer</legend>
-                <label for="distance">
-                    <input type="number" value="distance" id="distance">
-                </label>
-                <label for="submitButton">
-                    <input type="submit" value="Submit">
-                </label>
+                <label for="identificationNumber">Enter Identification Number for Genome</label>
+                <br>
+                <input type="number" name="identificationNumber" id="identificationNumber">
+                <br>
+                <label for="distance"></label>
+                <br>
+                <input type="number" id="distance" name="distance">
+                <br>
+                <label for="submitButton"></label>
+                <br>
+                <input type="submit" name="submitButton">
             </fieldset>
-           
         </form>
     </div>
 
-
-    <div id="startButton">
-        <button onclick="start()">Start</button>
-    </div>
-    
-
-
-
-    <script src="index.js"></script>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="index.js"></script>
+
 </html>

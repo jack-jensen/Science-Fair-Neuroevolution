@@ -3,6 +3,7 @@ from Activations import activationFunctions as af
 import pickle
 
 
+
 class Genome:
 
     class Node:
@@ -35,6 +36,7 @@ class Genome:
         self.initialIndex = 0
         self.numberOfInputs = 4 #The angle of the motors
         self.numberOfOutputs = 4 #The increment that the angle changes for each motor
+        self.fitnessBigOutputs = 0
 
         self.nodes = []
         self.connections = []
@@ -129,13 +131,24 @@ class Genome:
 
 
 
-def unPickleGenomeFile(fileName):
-    with open(fileName, "rb") as file:
-        raw_lines = file.readlines()
-        genomes = []
-        for raw_line in raw_lines:
-            line = pickle.loads(raw_line)
-            genomes.append(line)
-        genomes.sort(key=lambda genome:genome.identificationNumber)
-        
-    return genomes
+def unPickleGenomeFile(fileName, numberOfGenomes):
+    try:
+        with open(fileName, "rb") as file:
+            raw_lines = file.readlines()
+            if len(raw_lines) < numberOfGenomes:
+                return "wrongNumber"
+            genomes = []
+            try:
+                for raw_line in raw_lines:
+                    line = pickle.loads(raw_line)
+                    genomes.append(line)
+            except Exception as e:
+                print(f"Failed to unPickle \n {e}")
+                return "Error"
+            genomes.sort(key=lambda genome:genome.identificationNumber)
+            
+        return genomes
+    except Exception as e:
+        print(f"Error \n {e}")
+        return "Error"
+
