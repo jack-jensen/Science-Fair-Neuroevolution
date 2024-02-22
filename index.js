@@ -27,7 +27,10 @@ let percentageToDropElement = document.getElementById("percentageToDrop");
 let iterationsAllowedElement = document.getElementById("iterationsAllowed");
 
 // Fitness Form Elements
-let distanceElement = document.getElementById("distance");
+let x1Element = document.getElementById("x1");
+let y1Element = document.getElementById("y1");
+let x2Element = document.getElementById("x2");
+let y2Element = document.getElementById("y2");
 let identificationNumberElement = document.getElementById("identificationNumber");
 
 // Verifys that a function doesn't chain requests
@@ -174,12 +177,12 @@ function runOneGenome(){
             let genomeData = data.data;
             let genomeIdentificationNumber = data.identificationNumber;
 
-            downloadFile(genomeData, "genomeOutputData" + genomeIdentificationNumber);
+            downloadFile(genomeData, "genomeOutputData_" + genomeIdentificationNumber);
             alert("Remember this identification number: " + genomeIdentificationNumber);
 
 
             fitnessFormDiv.style.display = "block";
-            greenlightDiv.style.display = "none";
+            runOneGenomeDiv.style.display = "none";
         }
     })
 
@@ -194,19 +197,26 @@ fitnessForm.addEventListener("submit", (e) => {
     if (fitnessFormAjaxRunning) return;
     fitnessFormAjaxRunning = true;
 
-    let distance = distanceElement.value;
+    let x1 = x1Element.value;
+    let y1 = y1Element.value;
+    let x2 = x2Element.value;
+    let y2 = y2Element.value;
+
     let identificationNumber = identificationNumberElement.value;
 
     let postData = {
         "action": "sendFitnessData",
-        "identificationNumer": identificationNumber,
-        "distance": distance
+        "identificationNumber": identificationNumber,
+        "x1": x1,
+        "y1": y1,
+        "x2": x2,
+        "y2": y2
     }
 
     $.post("/api", postData, function( data ) {
         console.log(data)
 
-        if (data = "Error") {
+        if (data === "Error") {
             alert("Error with fitness form")
             fitnessFormAjaxRunning = false;
             return;

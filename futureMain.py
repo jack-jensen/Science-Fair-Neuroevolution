@@ -79,6 +79,7 @@ def beginProgram():
                     mutationRate = int(request.data()["mutationRate"])
                     numberOfGenomes = int(request.data()["numberOfGenomes"])
                     percentageToDrop = int(request.data()["percentageToDrop"])
+                    iterationsAllowed = int(request.data()["iterationsAllowed"])
 
                     if firstTime == "y":
                         generation = generationRunner(Genome, numberOfGenomes, percentageToDrop, mutationRate, genomes, True)
@@ -89,7 +90,7 @@ def beginProgram():
                 elif action == 'runOneGenome':
                     nextGenome = generation.findNextGenome()
                     if nextGenome != None:
-                        outputData = generation.runOneGenome(nextGenome)
+                        outputData = generation.runOneGenome(nextGenome, iterationsAllowed)
                         postData = {
                             "moreGenomes": "yes",
                             "data": outputData,
@@ -110,12 +111,15 @@ def beginProgram():
                         response_builder.set_body("No more Genomes")
 
                 elif action == "sendFitnessData":
-                    distance = request.data()["distance"]
+                    x1 = float(request.data()["x1"])
+                    y1 = float(request.data()["y1"])
+                    x2 = float(request.data()["x2"])
+                    y2 = float(request.data()["y2"])
                     identificationNumber = int(request.data()["identificationNumber"])
 
                     for genome in generation.genomes:
                         if genome.identificationNumber == identificationNumber:
-                            fitness = genome.calculateFitness(distance)
+                            fitness = genome.calculateFitness(x1, y1, x2, y2)
                             genome.fitness = fitness
                             break
 

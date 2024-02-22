@@ -1,6 +1,7 @@
 import random
 from Activations import activationFunctions as af
 import pickle
+from fitnessFunctions import distanceFromXGlobal, distanceFromYGlobal, differenceFromStraight
 
 
 
@@ -37,6 +38,9 @@ class Genome:
         self.numberOfInputs = 4 #The angle of the motors
         self.numberOfOutputs = 4 #The increment that the angle changes for each motor
         self.fitnessBigOutputs = 0
+        self.fitness = None
+        self.nodeSize = None
+        self.connectionSize = None
 
         self.nodes = []
         self.connections = []
@@ -64,8 +68,10 @@ class Genome:
         output = []
         
         for node in self.nodes:
+            print(node.activationFunction)
             if node.type == "input":
                 node.activation = inputs[node.nodeIndex]
+                print(node.activation)
             else:
                 #Check bias stuff later - it looks fishy
                 for connection in self.connections:
@@ -74,12 +80,19 @@ class Genome:
                             node.state += connection.weight * node.state * self.nodes[connection.gater].activation + node.bias
                         else:
                             node.state += connection.weight * self.nodes[connection.fromIndex].activation * self.nodes[connection.gater].activation
-                            
+                
                 node.activation = node.activationFunction(node.state)
+                print("output" + str(node.activation))
+                
+                
 
                 if node.type == "output":
-                    output.append(node)
-
+                    output.append(node.activation)
+                    print(output)
+        
+        
+        print(output)
+        
         return output
         
 
@@ -123,9 +136,13 @@ class Genome:
                 
         return False
     
-    def calculateFitness(self, distance, distanceWeight=10):
-        weightedDistance = distance * distanceWeight
-        fitness = weightedDistance
+    def calculateFitness(self, x1, y1, x2, y2):
+        distanceWeight = 15
+        straightnessWeight = -1
+        offCenterWeight = -4
+        
+        fitness = (distanceFromXGlobal(y1, y2) * distanceWeight) + (distanceFromYGlobal(x1, x2) * offCenterWeight) + (differenceFromStraight(x1, y1, x2, y2) * straightnessWeight)
+        
         return fitness
 
 

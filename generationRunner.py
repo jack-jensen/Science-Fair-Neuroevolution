@@ -1,4 +1,4 @@
-print(1 % 200)
+
 import random
 from Genome import Genome
 from Mutations import Mutations as M
@@ -58,11 +58,20 @@ class generationRunner:
             inputs = [stepper1.position, stepper2.position, stepper3.position, stepper4.position]
             outputs = genome.runGenome(inputs)
             outputData.append(outputs)
+            
+            stepper1.set_speed(200)
+            stepper2.set_speed(200)
+            stepper3.set_speed(200)
+            stepper4.set_speed(200)
 
             stepper1.move_to(round(abs(outputs[0]) % 200))
+            print(stepper1.position)
             stepper2.move_to(round(abs(outputs[1]) % 200))
+            print(stepper2.position)
             stepper3.move_to(round(abs(outputs[2]) % 200))
+            print(stepper3.position)
             stepper4.move_to(round(abs(outputs[3]) % 200))
+            print(stepper4.position)
 
         stepper1.move_to(0)
         stepper2.move_to(0)
@@ -79,7 +88,8 @@ class generationRunner:
     def afterGenomesRan(self):
         
 
-        self.rankedGenomes = self.genomes.sort(key=lambda item:item.fitness)
+        self.genomes.sort(key=lambda item:item.fitness)
+        self.rankedGenomes = self.genomes
 
         self.pickledGenerationData = pickle.dumps(self.rankedGenomes)
 
@@ -92,8 +102,9 @@ class generationRunner:
         #Cross-breeding
         while len(self.newGenomes) < self.numberOfGenomes:
 
-
-            while parent1 != parent2:
+            parent1 = None
+            parent2 = None
+            while parent1 == parent2:
                 parent1 = random.choice(self.rankedGenomes)
                 parent2 = random.choice(self.rankedGenomes)
 
@@ -101,28 +112,27 @@ class generationRunner:
             
             
             if parent1.fitness > parent2.fitness:
-                offspring.nodeSize = parent1.nodeSize
-                offspring.connectionSize = parent1.connectionSize
+                offspring.nodeSize = len(parent1.nodes)
+                offspring.connectionSize = len(parent1.connections)
 
             elif parent2.fitness > parent1.fitness:
-                offspring.nodeSize = parent2.nodeSize
-                offspring.connectionSize = parent2.connectionSize
+                offspring.nodeSize = len(parent2.nodes)
+                offspring.connectionSize = len(parent2.connections)
 
             else:
-                #Possibly make it so that the nodeSize is between
-                # the two parent's sizes instead of one or the other
-                parentsList= [parent1, parent2]
-                offspring.nodeSize = random.choice(parentsList).nodeSize
+                parentsList = [parent1, parent2]
+                offspring.nodeSize = len(random.choice(parentsList).nodes)
+                offspring.nodeSize = len(random.choice(parentsList).connections)
 
 
             i = 0
             while i < offspring.nodeSize:
                 # Make output nodeSize  and connectionSize variable in genome class WRONG WRONG WRONG use .len()
-                if i < offspring.nodeSize - parent1.outputSize:
-                    if i > parent1.nodeSize - parent1.outputSize:
+                if i < offspring.nodeSize - 4:
+                    if i > len(parent1.nodes) - 4:
                         node = parent2.nodes[i]
                     
-                    elif i > parent2.nodeSize - parent1.outputSize:
+                    elif i > len(parent2.nodes) - 4:
                         node = parent1.nodes[i]
 
                     else:
@@ -130,8 +140,8 @@ class generationRunner:
                         node = random.choice(choices)
 
                 else:
-                    choices = [parent1.nodes[parent1.nodeSize + i - offspring.nodeSize],
-                               parent2.nodes[parent2.nodeSize + i - offspring.nodeSize]]
+                    choices = [parent1.nodes[len(parent1.nodes) + i - offspring.nodeSize],
+                               parent2.nodes[len(parent2.nodes) + i - offspring.nodeSize]]
                     node = random.choice(choices)
 
                 offspring.nodes[i] = node
@@ -141,10 +151,10 @@ class generationRunner:
 
             i = 0
             while i < offspring.connectionSize:
-                if i > parent1.connectionSize:
+                if i > len(parent1.connections):
                     connection = parent2.connections[i]
 
-                elif i > parent2.connectionSize:
+                elif i > len(parent2.connections):
                     connection = parent1.connections[i]
 
                 else:

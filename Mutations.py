@@ -93,14 +93,16 @@ class Mutations:
         node.activationFunction = newActivationFunction
 
     @staticmethod
-    # Note: Verify that the node and connection indices change down
     def removeNodeMutation(genome):
         hiddenNodes = []
         for node in genome.nodes:
             if node.type == 'hidden':
                 hiddenNodes.append(node)
-
-        node = random.choice(hiddenNodes)
+        
+        if len(hiddenNodes) > 0:
+            node = random.choice(hiddenNodes)
+        else:
+            return
         
         sourceNodes = []
         gaters = []
