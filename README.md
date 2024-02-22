@@ -245,3 +245,8 @@ The struggle has been checking for loose wires and making sure everything is in 
 ![image](https://github.com/Georgie-design/Science-Fair-Neuroevolution/blob/main/BotPhotos/A1DB7D24-E681-4226-94B5-F41215435FC3.jpeg)
 > The new design - supports still on
 
+## February 21, 2024
+### 9:00 pm
+
+Today and yesterday, I have been running the files on the pico to check for errors. It goes error by error (I run it, it hits an error, I fix, repeat). I have fixed many errors. Probably the only big change I made was how it determines the fitness. The floor will be a coordinate grid, and two spots on the automation give me two coordinates. WIth these two coordinates, I determine the distance from the global x and y as well slope. These factors combined make up the fitness. Code is uploaded from today as well as yesterday.
+
