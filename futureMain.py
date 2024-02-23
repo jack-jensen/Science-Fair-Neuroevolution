@@ -90,6 +90,7 @@ def beginProgram():
                 elif action == 'runOneGenome':
                     nextGenome = generation.findNextGenome()
                     if nextGenome != None:
+                        print(nextGenome)
                         outputData = generation.runOneGenome(nextGenome, iterationsAllowed)
                         postData = {
                             "moreGenomes": "yes",
@@ -99,16 +100,22 @@ def beginProgram():
 
                         response_builder.set_body_from_dict(postData)
                     else:
+                        print(nextGenome)
                         
                         newGenomes, pickledGenerationData = generation.afterGenomesRan()
+                        print("HI")
 
                         postData = {
                             "moreGenomes": "no",
                             "newGenomes": newGenomes,
                             "pickledGenerationData": pickledGenerationData
                         }
+                        
+                        print("HELLO")
 
-                        response_builder.set_body("No more Genomes")
+                        response_builder.set_body_from_dict(postData)
+                        
+                        print("BYE")
 
                 elif action == "sendFitnessData":
                     x1 = float(request.data()["x1"])

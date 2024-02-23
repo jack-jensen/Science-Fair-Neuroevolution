@@ -88,7 +88,7 @@ class Mutations:
     @staticmethod
     def modifyActivationFunctionMutation(genome):
         node = random.choice(genome.nodes)
-        newActivationFunction = random.choice(genome.listOfActivationFunctions)
+        newActivationFunction = random.choice(node.listOfActivationFunctions)
 
         node.activationFunction = newActivationFunction
 
@@ -162,7 +162,10 @@ class Mutations:
         for connection in genome.connections:
             if connection.gater != -1:
                 gatedConnections.append(connection)
-
-        connection = random.choice(gatedConnections)
-        connection.gater = -1
+        
+        if len(gatedConnections) > 0:
+            connection = random.choice(gatedConnections)
+            connection.gater = -1
+        else:
+            print("No gated connections to remove")
         

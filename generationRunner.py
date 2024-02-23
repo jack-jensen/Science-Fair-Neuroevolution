@@ -87,24 +87,30 @@ class generationRunner:
     
     def afterGenomesRan(self):
         
-
+        print("check")
         self.genomes.sort(key=lambda item:item.fitness)
         self.rankedGenomes = self.genomes
+        print("check")
 
         self.pickledGenerationData = pickle.dumps(self.rankedGenomes)
-
+        
+        print("check")
 
         numberToEliminate = round(self.numberOfGenomes / self.percentageToDrop)
 
         for i in range(numberToEliminate):
             self.rankedGenomes.pop()
+            
+        print("check")
 
         #Cross-breeding
         while len(self.newGenomes) < self.numberOfGenomes:
+            print("Oops")
 
             parent1 = None
             parent2 = None
             while parent1 == parent2:
+                print("Oops: The sequel")
                 parent1 = random.choice(self.rankedGenomes)
                 parent2 = random.choice(self.rankedGenomes)
 
@@ -127,17 +133,20 @@ class generationRunner:
 
             i = 0
             while i < offspring.nodeSize:
-                # Make output nodeSize  and connectionSize variable in genome class WRONG WRONG WRONG use .len()
+                print("Oops: The Prequel")
+                # Use len() to get the length of nodes
                 if i < offspring.nodeSize - 4:
-                    if i > len(parent1.nodes) - 4:
+                    if i >= len(parent1.nodes) - 4:
                         node = parent2.nodes[i]
-                    
-                    elif i > len(parent2.nodes) - 4:
+        
+                    elif i >= len(parent2.nodes) - 4: 
                         node = parent1.nodes[i]
 
                     else:
                         choices = [parent1.nodes[i], parent2.nodes[i]]
                         node = random.choice(choices)
+
+
 
                 else:
                     choices = [parent1.nodes[len(parent1.nodes) + i - offspring.nodeSize],
@@ -151,6 +160,7 @@ class generationRunner:
 
             i = 0
             while i < offspring.connectionSize:
+                print("Oops: The Triquel")
                 if i > len(parent1.connections):
                     connection = parent2.connections[i]
 
@@ -162,6 +172,8 @@ class generationRunner:
                     connection = random.choice(choices)
 
                 offspring.connections[i] = connection
+                
+                i += 1
 
             
             #Sprinkle mutations
@@ -171,12 +183,16 @@ class generationRunner:
                 mutation = random.choice(self.listOfMutations)
                 mutation(offspring)
                 
+        
+                
             
                 
             self.newGenomes.append(offspring)
-                
-
+            
+        print("check")
+        self.newPickledGenomes = pickle.dumps(self.newGenomes)
+        print("check")
         #Once everything is done, this is what the class outputs
-        return self.newGenomes, self.pickledGenerationData
+        return self.newPickledGenomes, self.pickledGenerationData
 
 

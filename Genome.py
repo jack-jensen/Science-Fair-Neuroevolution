@@ -29,6 +29,7 @@ class Genome:
             self.selfConnection = selfConnection
             self.weight = random.random()
             self.gater = -1
+            print(self.weight)
         
 
     def __init__(self, identificationNumber, parent1, parent2):
@@ -57,10 +58,11 @@ class Genome:
 
         #initiate the connections
         for node1 in self.nodes:
-            if node1 == 'input':
+            if node1.type == 'input':
                 for node2 in self.nodes:
-                    if node2 == "output":
+                    if node2.type == "output":
                         self.connections.append(self.Connection(node1.nodeIndex, node2.nodeIndex))
+                        
 
 
     def runGenome(self, inputs):

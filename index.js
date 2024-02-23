@@ -158,15 +158,22 @@ hyperparameterForm.addEventListener("submit", (e) => {
 
 // Handles runOneGenome
 function runOneGenome(){
+    console.log("1")
 
     if (runOneGenomeAjaxRunning) return;
     runOneGenomeAjaxRunning = true;
+    
+    console.log("2")
 
     let postData = {
         "action": "runOneGenome"
     }
+    
+    console.log("3")
 
     $.post("/api", postData, function( data ) {
+        
+        console.log(data)
 
         fitnessForm.style.display = "block"
         if (data == "Error") {
@@ -174,15 +181,27 @@ function runOneGenome(){
             runOneGenomeAjaxRunning = false;
             return;
         }else{
-            let genomeData = data.data;
-            let genomeIdentificationNumber = data.identificationNumber;
+            if (data.moreGenomes == "yes") {
+                console.log("More Genomes")
+                let genomeData = data.data; 
+                let genomeIdentificationNumber = data.identificationNumber;
 
-            downloadFile(genomeData, "genomeOutputData_" + genomeIdentificationNumber);
-            alert("Remember this identification number: " + genomeIdentificationNumber);
+                downloadFile(genomeData, "genomeOutputData_" + genomeIdentificationNumber);
+                alert("Remember this identification number: " + genomeIdentificationNumber);
 
 
-            fitnessFormDiv.style.display = "block";
-            runOneGenomeDiv.style.display = "none";
+                fitnessFormDiv.style.display = "block";
+                runOneGenomeDiv.style.display = "none";
+            }else if (data.moreGenomes == "no"){
+                console.log("No More Genomes")
+                let pickledGenerationData = data.pickledGenerationData
+                let newGenomes = data.newGenomes
+
+                downloadFile(pickledGenerationData, "pickledGenerationData")
+                downloadFile(newGenomes, "newGenomes")
+                alert("Congrats, you have finished a generation. You may close the site.")
+
+            }
         }
     })
 
@@ -230,3 +249,4 @@ fitnessForm.addEventListener("submit", (e) => {
     fitnessFormAjaxRunning = false;
 
 })
+
