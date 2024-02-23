@@ -250,3 +250,8 @@ The struggle has been checking for loose wires and making sure everything is in 
 
 Today and yesterday, I have been running the files on the pico to check for errors. It goes error by error (I run it, it hits an error, I fix, repeat). I have fixed many errors. Probably the only big change I made was how it determines the fitness. The floor will be a coordinate grid, and two spots on the automation give me two coordinates. WIth these two coordinates, I determine the distance from the global x and y as well slope. These factors combined make up the fitness. Code is uploaded from today as well as yesterday.
 
+## February 22, 2024
+### 9:00 pm
+
+As you can tell by the late times, I have been spending all the time I can spare fixing the errors (7 am - 9 am, 7 pm - 9 pm). Unfortunately, one error evaded me for about an hour - becuase it wasn't an error! It took me many print() and console.log() statements (as you can see in the code), but I finally found the error... I forgot to increment the i-variable in my while loop so it ran forever! Quite annoying. Despite that, I actually got through all the code today. Now, I can download the new genomes! However, the pickling system pickles the list, not the class, so that means I am going to have to pickle each genome seperately, then put the byte-strings in a list. It shouldn't be too hard. Also, I forgot to mention that I got my science fair poster yesterday.
+
