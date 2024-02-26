@@ -255,3 +255,7 @@ Today and yesterday, I have been running the files on the pico to check for erro
 
 As you can tell by the late times, I have been spending all the time I can spare fixing the errors (7 am - 9 am, 7 pm - 9 pm). Unfortunately, one error evaded me for about an hour - becuase it wasn't an error! It took me many print() and console.log() statements (as you can see in the code), but I finally found the error... I forgot to increment the i-variable in my while loop so it ran forever! Quite annoying. Despite that, I actually got through all the code today. Now, I can download the new genomes! However, the pickling system pickles the list, not the class, so that means I am going to have to pickle each genome seperately, then put the byte-strings in a list. It shouldn't be too hard. Also, I forgot to mention that I got my science fair poster yesterday.
 
+## February 25, 2024
+### 9:00 pm
+
+I have been working relentlessly, and the biggest change to report would be the serialization. Instead of pickling, now I use JSON. The biggest error right now is that the data is not being transferred through the request to the server. It is very tiring and frustrating. I also began a little work on the legs of the machine, currently working to fit a hole onto the motor shaft. After the code error is fixed, I will look through all my code and make it pretty (while ensuring the algorithm is accurate). Then the only thing left will be the legs and coordinate grid and I will be ready to make my board.
