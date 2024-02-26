@@ -1,4 +1,5 @@
 import random
+import Activations as A
 
 class Mutations:
     def __init__(self):
@@ -10,8 +11,8 @@ class Mutations:
         gater = connection.gater
 
         #Check this line of code later
-        index = min(connection.toIndex, genome.size - genome.outputSize)
-        node = genome.Node("hidden", index)
+        index = min(connection.toIndex, len(genome.nodes) - 4)
+        node = genome.Node("hidden", index, random.uniform(-5, 5), A.randomFunction())
 
         for node in genome.nodes:
             if node.nodeIndex >= index:
@@ -32,9 +33,11 @@ class Mutations:
         genome.nodes.append(node)
         genome.nodes.sort(key=lambda node:node.nodeIndex)
         genome.connections.remove(connection)
+        
+       
 
-        newConnection1 = genome.Connection(connection.fromIndex, index)
-        newConnection2 = genome.Connection(index, connection.toIndex)
+        newConnection1 = genome.Connection(connection.fromIndex, index, False, random.uniform(-2, 2), -1)
+        newConnection2 = genome.Connection(index, connection.toIndex, False, random.uniform(-2, 2), -1)
 
         if gater != -1:
             newConnections = [newConnection1, newConnection2]
@@ -48,7 +51,7 @@ class Mutations:
         pairs = []
         for node1 in genome.nodes:
             for node2 in genome.nodes:
-                if node1.isNotConnectedTo(node2):
+                if not genome.areNodesConnected(node1, node2):
                     pairs.append([node1, node2])
 
         pair = random.choice(pairs)
@@ -58,7 +61,7 @@ class Mutations:
         else:
             selfConnection = False
 
-        genome.connections.append(genome.Connection(pair[0], pair[1], selfConnection))
+        genome.connections.append(genome.Connection(pair[0].nodeIndex, pair[1].nodeIndex, selfConnection, random.uniform(-2, 2), -1))
 
     @staticmethod
     def addGateMutation(genome):
@@ -88,7 +91,7 @@ class Mutations:
     @staticmethod
     def modifyActivationFunctionMutation(genome):
         node = random.choice(genome.nodes)
-        newActivationFunction = random.choice(node.listOfActivationFunctions)
+        newActivationFunction = A.randomFunction()
 
         node.activationFunction = newActivationFunction
 
@@ -150,7 +153,7 @@ class Mutations:
 
         for connection in genome.connections:
             if len(genome.findOutgoingConnections(genome.nodes[connection.fromIndex])) > 1 and len(genome.findIncomingConnections(genome.nodes[connection.toIndex])) > 1:
-                connection.append(connection)
+                connections.append(connection)
 
         connection = random.choice(connections)
         genome.connections.remove(connection)

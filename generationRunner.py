@@ -1,10 +1,8 @@
-
 import random
-from Genome import Genome
+from Genome import deserializeGenomeJSON, serializeGenomes, Genome
 from Mutations import Mutations as M
-import pickle
 from Motor import stepper1, stepper2, stepper3, stepper4
-
+from Activations import randomFunction
 
 #After each indivitaul run is complete, ask if they need to pause
 
@@ -34,13 +32,34 @@ class generationRunner:
 
         if self.firstTime:
             for i in range(self.numberOfGenomes):
-                self.genomes.append(self.genomeClass(i, "Jack Jensen", "Jack Jensen"))
+                
+                self.genomes.append(self.genomeClass(i, 0, ["Jack Jensen", "Jack Jensen"], [], []))
+                
+
+                #Initiate the input and output nodes
+                for j in range(4):
+                    self.genomes[i].nodes.append(self.genomeClass.Node("input", 0, random.uniform(-5, 5), randomFunction()))
+                for j in range(4):
+                    self.genomes[i].nodes.append(self.genomeClass.Node("output", 0, random.uniform(-5, 5), randomFunction()))
+
+                for node in self.genomes[i].nodes:
+                    node.nodeIndex = self.genomes[i].indexCalculator()
+                
+
+                for node1 in self.genomes[i].nodes:
+                    if node1.type == "input":
+                        for node2 in self.genomes[i].nodes:
+                            if node2.type == "output":
+                                self.genomes[i].connections.append(self.genomeClass.Connection(node1.nodeIndex, node2.nodeIndex, False, random.uniform(-2, 2), -1))
+                                
+                
+                
+                    
+                self.genomes[i].nodes.sort(key=lambda item:item.nodeIndex)
+                    
+                    
         else:
-            if len(self.genomes) != self.numberOfGenomes:
-                raise RuntimeError("Number of genomes provided does not match number of genomes needed")
-            else:
-                for i in range(self.numberOfGenomes):
-                    self.genomes[i] = self.oldGenomes[i]
+            self.genomes = deserializeGenomeFile("newGenomes.txt", self.numberOfGenomes)
         
         self.genomes.sort(key=lambda item:item.identificationNumber)
 
@@ -49,8 +68,7 @@ class generationRunner:
             if genome.fitness == None:
                 return genome
         return None
-
-
+    
     
     def runOneGenome(self, genome, iterations):
         outputData = []
@@ -65,13 +83,13 @@ class generationRunner:
             stepper4.set_speed(200)
 
             stepper1.move_to(round(abs(outputs[0]) % 200))
-            print(stepper1.position)
+            
             stepper2.move_to(round(abs(outputs[1]) % 200))
-            print(stepper2.position)
+            
             stepper3.move_to(round(abs(outputs[2]) % 200))
-            print(stepper3.position)
+            
             stepper4.move_to(round(abs(outputs[3]) % 200))
-            print(stepper4.position)
+            
 
         stepper1.move_to(0)
         stepper2.move_to(0)
@@ -87,34 +105,37 @@ class generationRunner:
     
     def afterGenomesRan(self):
         
-        print("check")
+        
         self.genomes.sort(key=lambda item:item.fitness)
         self.rankedGenomes = self.genomes
-        print("check")
-
-        self.pickledGenerationData = pickle.dumps(self.rankedGenomes)
         
-        print("check")
+        
+        self.serializedGenerationData = serializeGenomes(self.rankedGenomes)
+        
+        
+        
+       
 
         numberToEliminate = round(self.numberOfGenomes / self.percentageToDrop)
 
         for i in range(numberToEliminate):
             self.rankedGenomes.pop()
             
-        print("check")
+      
 
         #Cross-breeding
         while len(self.newGenomes) < self.numberOfGenomes:
-            print("Oops")
+           
 
             parent1 = None
             parent2 = None
             while parent1 == parent2:
-                print("Oops: The sequel")
+                
                 parent1 = random.choice(self.rankedGenomes)
                 parent2 = random.choice(self.rankedGenomes)
-
-            offspring = Genome(len(self.newGenomes), parent1, parent2)
+            
+            generationNumber = parent1.generationNumber + 1
+            offspring = Genome(len(self.newGenomes), generationNumber, [[parent1.identificationNumber, parent1.generationNumber], [parent2.identificationNumber, parent2.generationNumber]], [], [])
             
             
             if parent1.fitness > parent2.fitness:
@@ -128,12 +149,12 @@ class generationRunner:
             else:
                 parentsList = [parent1, parent2]
                 offspring.nodeSize = len(random.choice(parentsList).nodes)
-                offspring.nodeSize = len(random.choice(parentsList).connections)
+                offspring.connectionSize = len(random.choice(parentsList).connections)
 
 
             i = 0
             while i < offspring.nodeSize:
-                print("Oops: The Prequel")
+              
                 # Use len() to get the length of nodes
                 if i < offspring.nodeSize - 4:
                     if i >= len(parent1.nodes) - 4:
@@ -153,14 +174,15 @@ class generationRunner:
                                parent2.nodes[len(parent2.nodes) + i - offspring.nodeSize]]
                     node = random.choice(choices)
 
-                offspring.nodes[i] = node
+                offspring.nodes.append(node)
 
                 i += 1
 
-
+            offspring.nodes.sort(key=lambda item:item.nodeIndex)
+            
             i = 0
             while i < offspring.connectionSize:
-                print("Oops: The Triquel")
+                
                 if i > len(parent1.connections):
                     connection = parent2.connections[i]
 
@@ -171,7 +193,7 @@ class generationRunner:
                     choices = [parent1.connections[i], parent2.connections[i]]
                     connection = random.choice(choices)
 
-                offspring.connections[i] = connection
+                offspring.connections.append(connection)
                 
                 i += 1
 
@@ -189,10 +211,16 @@ class generationRunner:
                 
             self.newGenomes.append(offspring)
             
-        print("check")
-        self.newPickledGenomes = pickle.dumps(self.newGenomes)
-        print("check")
+      
+        
+        
+        self.serializedGenomes = serializeGenomes(self.newGenomes)
+        
+        
+        
+      
+        
         #Once everything is done, this is what the class outputs
-        return self.newPickledGenomes, self.pickledGenerationData
+        return self.serializedGenomes, self.serializedGenerationData
 
 

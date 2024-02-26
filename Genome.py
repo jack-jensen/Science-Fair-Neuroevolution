@@ -1,67 +1,53 @@
 import random
-from Activations import activationFunctions as af
-import pickle
 from fitnessFunctions import distanceFromXGlobal, distanceFromYGlobal, differenceFromStraight
-
-
+import json
+from Activations import runFunction
 
 class Genome:
 
     class Node:
-        def __init__(self, type, index):
-            self.listOfActivationFunctions = [af.binaryStep, af.linear, af.sigmoid, af.tanh,
-                                af.relu, af.softsign, af.gaussian, af.sinusoid,
-                               af.bentIdentity, af.bipolarStep, af.hardTanh,
-                               af.selu]
+        def __init__(self, type, index, bias, activationFunction):
             self.type = type
             self.nodeIndex = index
+
             self.activation = 0
             self.state = 0
-            self.bias = random.random()
-            self.activationFunction = random.choice(self.listOfActivationFunctions)
+
+            self.bias = bias # random
+            self.activationFunction = activationFunction
+            
+        
 
 
             
     class Connection:
-        def __init__(self, fromIndex, toIndex, selfConnection=False):
+        def __init__(self, fromIndex, toIndex, selfConnection, weight, gater):
             self.fromIndex = fromIndex
             self.toIndex = toIndex
             self.selfConnection = selfConnection
-            self.weight = random.random()
-            self.gater = -1
-            print(self.weight)
+            self.weight = weight
+            self.gater = gater #-1 normally
+            
         
 
-    def __init__(self, identificationNumber, parent1, parent2):
+    def __init__(self, identificationNumber, generationNumber, parents, nodes, connections):
         self.identificationNumber = identificationNumber
-        self.parents = [parent1, parent2]
-        self.initialIndex = 0
-        self.numberOfInputs = 4 #The angle of the motors
-        self.numberOfOutputs = 4 #The increment that the angle changes for each motor
-        self.fitnessBigOutputs = 0
+        self.parents = parents
         self.fitness = None
         self.nodeSize = None
         self.connectionSize = None
-
-        self.nodes = []
-        self.connections = []
+        self.generationNumber = generationNumber
         
 
-        #Initiate the input and output nodes
-        for i in range(self.numberOfInputs):
-            self.nodes.append(self.Node("input", self.indexCalculator()))
-        for i in range(self.numberOfOutputs):
-            self.nodes.append(self.Node("output", self.indexCalculator()))
+        self.nodes = nodes
+        self.connections = connections
 
-        self.size = len(self.nodes)
-        self.nodes.sort(key=lambda item:item.nodeIndex)
+        self.initialIndex = 0
+        
 
-        #initiate the connections
-        for node1 in self.nodes:
-            if node1.type == 'input':
-                for node2 in self.nodes:
-                    if node2.type == "output":
-                        self.connections.append(self.Connection(node1.nodeIndex, node2.nodeIndex))
+        
+
+        
                         
 
 
@@ -70,10 +56,10 @@ class Genome:
         output = []
         
         for node in self.nodes:
-            print(node.activationFunction)
+            
             if node.type == "input":
                 node.activation = inputs[node.nodeIndex]
-                print(node.activation)
+                
             else:
                 #Check bias stuff later - it looks fishy
                 for connection in self.connections:
@@ -83,17 +69,18 @@ class Genome:
                         else:
                             node.state += connection.weight * self.nodes[connection.fromIndex].activation * self.nodes[connection.gater].activation
                 
-                node.activation = node.activationFunction(node.state)
-                print("output" + str(node.activation))
+                node.activation = runFunction(node.state, node.activationFunction)
+                
                 
                 
 
                 if node.type == "output":
                     output.append(node.activation)
-                    print(output)
+
+                    
         
         
-        print(output)
+        
         
         return output
         
@@ -120,6 +107,7 @@ class Genome:
         return outgoingConnections
 
             
+            
     def areNodesConnected(self, node1, node2):
         """Is this more complicated than it needs to be? Probably!"""
         incomingNode1 = self.findIncomingConnections(node1)
@@ -133,9 +121,9 @@ class Genome:
                     return True
         for outgoingConnection in outgoingNode1:
             for incomingConnection in incomingNode2:
-                if outgoingConnection.toindex == incomingConnection.fromIndex:
+                if outgoingConnection.toIndex == incomingConnection.fromIndex:
                     return True
-                
+        
         return False
     
     def calculateFitness(self, x1, y1, x2, y2):
@@ -146,28 +134,86 @@ class Genome:
         fitness = (distanceFromXGlobal(y1, y2) * distanceWeight) + (distanceFromYGlobal(x1, x2) * offCenterWeight) + (differenceFromStraight(x1, y1, x2, y2) * straightnessWeight)
         
         return fitness
+    
+    
+def serializeGenomes(genomes):
+    
+    genomesData = []
+    
+    for genome in genomes:
+        nodesData = []
+        connectionsData = []
+
+        for node in genome.nodes:
+            nodeData = {
+                'type': node.type,
+                'nodeIndex': node.nodeIndex,
+                'bias': node.bias,
+                'activationFunction': node.activationFunction
+            }
+
+            nodesData.append(nodeData)
+
+        for connection in genome.connections:
+            connectionData = {
+                'fromIndex': connection.fromIndex,
+                'toIndex': connection.toIndex,
+                'selfConnection': connection.selfConnection,
+                'weight': connection.weight,
+                'gater': connection.gater
+            }
+
+            connectionsData.append(connectionData)
+ 
+
+        genomeData = {
+            'identificationNumber': genome.identificationNumber,
+            'parents': genome.parents,
+            'initialIndex': genome.initialIndex,
+            'fitness': genome.fitness,
+            'nodeSize': genome.nodeSize,
+            'connectionSize': genome.connectionSize,
+            'nodes': nodesData,
+            'connections': connectionsData,
+            'generationNumber': genome.generationNumber
+
+        }
+
+        genomesData.append(genomeData)
+
+    allData = {
+        'genomes': genomesData
+    }
+
+    serializedGenomes = json.dumps(allData)
+    return serializedGenomes
+    
 
 
 
 
-def unPickleGenomeFile(fileName, numberOfGenomes):
-    try:
-        with open(fileName, "rb") as file:
-            raw_lines = file.readlines()
-            if len(raw_lines) < numberOfGenomes:
-                return "wrongNumber"
-            genomes = []
-            try:
-                for raw_line in raw_lines:
-                    line = pickle.loads(raw_line)
-                    genomes.append(line)
-            except Exception as e:
-                print(f"Failed to unPickle \n {e}")
-                return "Error"
-            genomes.sort(key=lambda genome:genome.identificationNumber)
-            
-        return genomes
-    except Exception as e:
-        print(f"Error \n {e}")
-        return "Error"
+def deserializeGenomeJSON(JSON, numberOfGenomes):
+
+    data = json.loads(JSON)
+
+    if len(data['genomes']) != numberOfGenomes:
+        return 'IncorrectNumberOfGenomes'
+    
+    genomes = []
+    for genome in data['genomes']:
+
+        nodes = []
+        connections = []
+
+        for node in genome['nodes']:
+            nodes.append(Genome.Node(node['type'], node['nodeIndex'], node['bias'], node['activationFunction']))
+
+        for connection in genome['connections']:
+            connections.append(Genome.Connection(connection['fromIndex'], connection['toIndex'], connection['selfConnection'], connection['weight'], connection['gater']))
+
+        nodes.sort(key=lambda node:node.nodeIndex)
+
+        genomes.append(Genome(genome['identificationNumber'], genome['generationNumber'], genome['parents'], nodes, connections))
+
+    return genomes
 

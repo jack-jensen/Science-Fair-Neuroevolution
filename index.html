@@ -16,10 +16,10 @@
     <div class="formDiv" id="pickleFormDiv">
         <form id="pickleForm">
             <fieldset>
-                <legend>Pickle Form</legend>
-                <label for="genomeFile"><p>Enter Pickle File Containing Genomes</p></label>
+                <legend>JSON Form</legend>
+                <label for="genomeFile"><p>Enter JSON Containing Genomes</p></label>
                 <br>
-                <input type="file" name="genomeFile" id="genomeFile">
+                <input type="text" name="genomeFile" id="genomeFile">
                 <br>
                 <label for="numberOfGenomesExpected">Number of genomes expected</label>
                 <br>
@@ -70,9 +70,9 @@
     </div>
 
     <!-- Greenlight Div -->
-    <div id="runOneGenomeDiv">
+    <div id="runOneGenomeDiv" class="center">
         <p>Everything is going as planned. Verify the automation is in the correct location and give the green light!</p>
-        <button onclick="runOneGenome()">Run One Genome</button>
+        <button onclick="runOneGenome()" class="center">Run One Genome</button>
     </div>
 
     <!-- The following div controlls the fitness. I have only added the distance for sake of simplicity. In the project proposal, it also has some
@@ -111,9 +111,15 @@
         </form>
     </div>
 
+    <div id="finishedDiv" class="center">
+        <iframe src="https://giphy.com/embed/nXxOjZrbnbRxS" width="356" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/win-nXxOjZrbnbRxS">via GIPHY</a></p>
+
+    </div>
+
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="index.js"></script>
 
 </html>
+

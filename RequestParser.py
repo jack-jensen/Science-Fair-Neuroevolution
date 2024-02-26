@@ -22,6 +22,7 @@ class RequestParser:
         self.parse_request(raw_request)
 
     def parse_request(self, raw_request):
+        print(f"Raw Request: {raw_request}")
 
         if len(raw_request) > 0:
             # some data supplied
@@ -229,6 +230,8 @@ class RequestParser:
             json_string += self.content[line_num]
             line_num += 1
         # parse json string to dictionary
+        print(f"Content: {self.content}")
+        print(f"Stuff: {json_string}")
         self.post_data = json.loads(json_string)
 
     def url_match(self, test_url):

@@ -9,6 +9,7 @@ let hyperparameterFormDiv = document.getElementById("hyperparametersFormDiv");
 let runOneGenomeDiv = document.getElementById("runOneGenomeDiv");
 let fitnessFormDiv = document.getElementById("fitnessFormDiv");
 let numberOfGenomesDiv = document.getElementById("numberOfGenomesDiv");
+let finishedDiv = document.getElementById("finishedDiv");
 
 // Forms
 let pickleForm = document.getElementById("pickleForm");
@@ -16,7 +17,7 @@ let hyperparameterForm = document.getElementById("hyperparametersForm");
 let fitnessForm = document.getElementById("fitnessForm");
 
 // Pickle Form Elements
-let fileElement = document.getElementById("genomeFile");
+let dataElement = document.getElementById("genomeFile");
 let firstTimeElement = document.getElementById("firstTime");
 let numberOfGenomesExpectedElement = document.getElementById("numberOfGenomesExpected");
 
@@ -44,6 +45,7 @@ pickleFormDiv.style.display = "none";
 hyperparameterFormDiv.style.display = "none";
 runOneGenomeDiv.style.display = "none";
 fitnessFormDiv.style.display = "none";
+finishedDiv.style.display = "none";
 
 // Function to download file. Credit to video link:
 // https://www.youtube.com/watch?v=io2blfAlO6E
@@ -80,44 +82,34 @@ pickleForm.addEventListener("submit", (e) => {
     if (pickleFormAjaxRunning) return;
     pickleFormAjaxRunning = true;
 
-    let file = fileElement.files[0];
-    let firstTime = firstTimeElement.value;
-    let numberOfGenomesExpected = numberOfGenomesExpectedElement.value;
+    let formData = new FormData(pickleForm); // Create FormData object from the form
+    
+    console.log(formData.value)
 
-    if (file == null) {
-        file = "none";
-    }
-
-    let postData = {
-        "action": "sendPickledGenomes",
-        "file": file,
-        "firstTime": firstTime,
-        "numberOfGenomesExpected": numberOfGenomesExpected
-
-    }
-
-    $.post("/api", postData, function( data ) {
-
-        console.log(data)
-
-        if (data == "Error") {
-
-            alert("Error with Pickling");
-            pickleFormAjaxRunning = false;
-            return;
-        }else{
-
+    $.ajax({
+        url: "/api",
+        type: "POST",
+        data: formData, // Use FormData object directly
+        contentType: false, // Set contentType to false to prevent jQuery from setting it automatically
+        processData: false, // Set processData to false to prevent jQuery from processing the data
+        success: function(data) {
+            console.log(data);
             hyperparameterFormDiv.style.display = "block";
             pickleFormDiv.style.display = "none";
 
             if (firstTime != "y") {
                 numberOfGenomesDiv.style.display = "none";
             }
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert("Error with ajax")
+        },
+        complete: function() {
+            pickleFormAjaxRunning = false;
         }
-    })
-
-    pickleFormAjaxRunning = false;
-})
+    });
+});
 
 // Handles Hyperparameter Form
 hyperparameterForm.addEventListener("submit", (e) => {
@@ -193,6 +185,8 @@ function runOneGenome(){
                 fitnessFormDiv.style.display = "block";
                 runOneGenomeDiv.style.display = "none";
             }else if (data.moreGenomes == "no"){
+                finishedDiv.style.display = "block";
+                runOneGenomeDiv.style.display = "none";
                 console.log("No More Genomes")
                 let pickledGenerationData = data.pickledGenerationData
                 let newGenomes = data.newGenomes
@@ -249,4 +243,6 @@ fitnessForm.addEventListener("submit", (e) => {
     fitnessFormAjaxRunning = false;
 
 })
+
+
 
