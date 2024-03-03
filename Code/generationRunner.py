@@ -71,10 +71,10 @@ class generationRunner:
             stepper4.move_to(round(abs(outputs[3]) % 200))
             utime.sleep_ms(500)
             
-        stepper1.move_to(0)
-        stepper2.move_to(0)
-        stepper3.move_to(0)
-        stepper4.move_to(0)
+            stepper1.move_to(0)
+            stepper2.move_to(0)
+            stepper3.move_to(0)
+            stepper4.move_to(0)
         
         return outputData
     
