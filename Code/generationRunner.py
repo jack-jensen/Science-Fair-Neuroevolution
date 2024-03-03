@@ -20,12 +20,12 @@ class generationRunner:
         if self.genomes == []:
             for i in range(self.numberOfGenomes):
                 
-                self.genomes.append(self.genomeClass(i, 0, ["Jack Jensen", "Jack Jensen"], [], []))
+                self.genomes.append(Genome(i, 0, ["Jack Jensen", "Jack Jensen"], [], []))
                 
                 for j in range(4):
                     self.genomes[i].nodes.append(Genome.Node("input", 0, random.uniform(-5, 5), randomFunction()))
                 for j in range(4):
-                    self.genomes[i].nodes.append(self.genomeClass.Node("output", 0, random.uniform(-5, 5), randomFunction()))
+                    self.genomes[i].nodes.append(Genome.Node("output", 0, random.uniform(-5, 5), randomFunction()))
 
                 for node in self.genomes[i].nodes:
                     node.nodeIndex = self.genomes[i].indexCalculator()
@@ -34,7 +34,7 @@ class generationRunner:
                     if node1.type == "input":
                         for node2 in self.genomes[i].nodes:
                             if node2.type == "output":
-                                self.genomes[i].connections.append(self.genomeClass.Connection(node1.nodeIndex, node2.nodeIndex, False, random.uniform(-2, 2), -1))
+                                self.genomes[i].connections.append(Genome.Connection(node1.nodeIndex, node2.nodeIndex, False, random.uniform(-2, 2), -1))
                                 
                 self.genomes[i].nodes.sort(key=lambda item:item.nodeIndex)
 
