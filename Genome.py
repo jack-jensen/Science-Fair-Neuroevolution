@@ -67,7 +67,7 @@ class Genome:
                         if connection.selfConnection:
                             node.state += connection.weight * node.state * self.nodes[connection.gater].activation + node.bias
                         else:
-                            node.state += connection.weight * self.nodes[connection.fromIndex].activation * self.nodes[connection.gater].activation
+                            node.state += connection.weight * self.nodes[connection.fromIndex].activation * self.nodes[connection.gater].activation + node.bias
                 
                 node.activation = runFunction(node.state, node.activationFunction)
                 

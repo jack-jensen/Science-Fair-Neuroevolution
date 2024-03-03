@@ -1,3 +1,4 @@
+
 from machine import Pin
 import utime
  
@@ -5,10 +6,6 @@ class Stepper:
     def __init__(self, step_pin, dir_pin):
         self.step_pin = Pin(step_pin, Pin.OUT)
         self.dir_pin = Pin(dir_pin, Pin.OUT)
-        
-        self.step_pin.value(0)
-        self.dir_pin.value(0)
-        
         self.position = 0
  
     def set_speed(self, speed):
@@ -31,18 +28,10 @@ dir_pin1 = 16   # GPIO number where dir pin is connected
 
 step_pin2 = 19
 dir_pin2 = 18
-
-step_pin3 = 14
-dir_pin3 = 15
-
-step_pin4 = 12
-dir_pin4 = 13
  
 # Initialize stepper
 stepper1 = Stepper(step_pin1, dir_pin1)
 stepper2 = Stepper(step_pin2, dir_pin2)
-stepper3 = Stepper(step_pin3, dir_pin3)
-stepper4 = Stepper(step_pin4, dir_pin4)
  
 def loop():
     while True:

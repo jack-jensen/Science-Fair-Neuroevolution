@@ -4,7 +4,6 @@ console.log("Javascript file operational");
 let button = document.getElementById("startButton")
 
 // Divs
-let pickleFormDiv = document.getElementById("pickleFormDiv");
 let hyperparameterFormDiv = document.getElementById("hyperparametersFormDiv");
 let runOneGenomeDiv = document.getElementById("runOneGenomeDiv");
 let fitnessFormDiv = document.getElementById("fitnessFormDiv");
@@ -12,14 +11,8 @@ let numberOfGenomesDiv = document.getElementById("numberOfGenomesDiv");
 let finishedDiv = document.getElementById("finishedDiv");
 
 // Forms
-let pickleForm = document.getElementById("pickleForm");
 let hyperparameterForm = document.getElementById("hyperparametersForm");
 let fitnessForm = document.getElementById("fitnessForm");
-
-// Pickle Form Elements
-let dataElement = document.getElementById("genomeFile");
-let firstTimeElement = document.getElementById("firstTime");
-let numberOfGenomesExpectedElement = document.getElementById("numberOfGenomesExpected");
 
 // Hyperparameter Form Elements
 let mutationRateElement = document.getElementById("mutationRate");
@@ -35,13 +28,11 @@ let y2Element = document.getElementById("y2");
 let identificationNumberElement = document.getElementById("identificationNumber");
 
 // Verifys that a function doesn't chain requests
-let pickleFormAjaxRunning = false;
 let hyperparametersAjaxRunning = false;
 let runOneGenomeAjaxRunning = false;
 let fitnessFormAjaxRunning = false;
 
 // Hide Divs
-pickleFormDiv.style.display = "none";
 hyperparameterFormDiv.style.display = "none";
 runOneGenomeDiv.style.display = "none";
 fitnessFormDiv.style.display = "none";
@@ -70,46 +61,45 @@ function downloadFile(data, name = "myData.txt") {
 
 // Handles Initial Start Button
 function start(){
-    pickleFormDiv.style.display = "block";
-    pickleFormDiv.style.borderStyle = "solid";
+    hyperparameterFormDiv.style.display = "block";
     button.style.display = "none";
 }
 
-// Handles Pickle Form
-pickleForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+// // Handles Pickle Form
+// pickleForm.addEventListener("submit", (e) => {
+//     e.preventDefault();
 
-    if (pickleFormAjaxRunning) return;
-    pickleFormAjaxRunning = true;
+//     if (pickleFormAjaxRunning) return;
+//     pickleFormAjaxRunning = true;
 
-    let formData = new FormData(pickleForm); // Create FormData object from the form
+//     let formData = new FormData(pickleForm); // Create FormData object from the form
     
-    console.log(formData.value)
+//     console.log(formData.value)
 
-    $.ajax({
-        url: "/api",
-        type: "POST",
-        data: formData, // Use FormData object directly
-        contentType: false, // Set contentType to false to prevent jQuery from setting it automatically
-        processData: false, // Set processData to false to prevent jQuery from processing the data
-        success: function(data) {
-            console.log(data);
-            hyperparameterFormDiv.style.display = "block";
-            pickleFormDiv.style.display = "none";
+//     $.ajax({
+//         url: "/api",
+//         type: "POST",
+//         data: formData, // Use FormData object directly
+//         contentType: false, // Set contentType to false to prevent jQuery from setting it automatically
+//         processData: false, // Set processData to false to prevent jQuery from processing the data
+//         success: function(data) {
+//             console.log(data);
+//             hyperparameterFormDiv.style.display = "block";
+//             pickleFormDiv.style.display = "none";
 
-            if (firstTime != "y") {
-                numberOfGenomesDiv.style.display = "none";
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-            alert("Error with ajax")
-        },
-        complete: function() {
-            pickleFormAjaxRunning = false;
-        }
-    });
-});
+//             if (firstTime != "y") {
+//                 numberOfGenomesDiv.style.display = "none";
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             console.error(error);
+//             alert("Error with ajax")
+//         },
+//         complete: function() {
+//             pickleFormAjaxRunning = false;
+//         }
+//     });
+// });
 
 // Handles Hyperparameter Form
 hyperparameterForm.addEventListener("submit", (e) => {
@@ -185,15 +175,15 @@ function runOneGenome(){
                 fitnessFormDiv.style.display = "block";
                 runOneGenomeDiv.style.display = "none";
             }else if (data.moreGenomes == "no"){
-                finishedDiv.style.display = "block";
-                runOneGenomeDiv.style.display = "none";
+                // finishedDiv.style.display = "block";
+                // runOneGenomeDiv.style.display = "none";
                 console.log("No More Genomes")
                 let pickledGenerationData = data.pickledGenerationData
                 let newGenomes = data.newGenomes
 
                 downloadFile(pickledGenerationData, "pickledGenerationData")
                 downloadFile(newGenomes, "newGenomes")
-                alert("Congrats, you have finished a generation. You may close the site.")
+                alert("Congrats, you have finished a generation.")
 
             }
         }

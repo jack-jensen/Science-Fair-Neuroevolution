@@ -3,6 +3,7 @@ from Genome import deserializeGenomeJSON, serializeGenomes, Genome
 from Mutations import Mutations as M
 from Motor import stepper1, stepper2, stepper3, stepper4
 from Activations import randomFunction
+import utime
 
 #After each indivitaul run is complete, ask if they need to pause
 
@@ -12,7 +13,7 @@ from Activations import randomFunction
 # cross-breed
 
 class generationRunner:
-    def __init__(self, genome, numberOfGenomes, percentageToDrop, mutationRate, genomes, firstTime=False):
+    def __init__(self, genomeClass, numberOfGenomes, percentageToDrop, mutationRate, genomes):
         self.listOfMutations = [M.addNodeMutation, M.addConnectionMutation, M.addGateMutation,
                            M.modifyWeightMutation,M.modifyBiasMutation, M.modifyActivationFunctionMutation,
                            M.removeNodeMutation, M.removeConnectionMutation, M.removeGateMutation]
@@ -23,14 +24,14 @@ class generationRunner:
         self.mutationRate = mutationRate
         self.numberOfGenomes = numberOfGenomes
         self.oldGenomes = genomes
-        self.genomeClass = genome
-        self.firstTime = firstTime
+        self.genomeClass = genomeClass
+
 
         self.newGenomes = []
         self.genomes = []
         
 
-        if self.firstTime:
+        if self.genomes == []:
             for i in range(self.numberOfGenomes):
                 
                 self.genomes.append(self.genomeClass(i, 0, ["Jack Jensen", "Jack Jensen"], [], []))
@@ -56,10 +57,7 @@ class generationRunner:
                 
                     
                 self.genomes[i].nodes.sort(key=lambda item:item.nodeIndex)
-                    
-                    
-        else:
-            self.genomes = deserializeGenomeFile("newGenomes.txt", self.numberOfGenomes)
+
         
         self.genomes.sort(key=lambda item:item.identificationNumber)
 
@@ -77,18 +75,23 @@ class generationRunner:
             outputs = genome.runGenome(inputs)
             outputData.append(outputs)
             
-            stepper1.set_speed(200)
-            stepper2.set_speed(200)
-            stepper3.set_speed(200)
-            stepper4.set_speed(200)
+            stepper1.set_speed(100)
+            stepper2.set_speed(100)
+            stepper3.set_speed(100)
+            stepper4.set_speed(100)
 
             stepper1.move_to(round(abs(outputs[0]) % 200))
+            utime.sleep_ms(500)
             
             stepper2.move_to(round(abs(outputs[1]) % 200))
+            utime.sleep_ms(500)
             
             stepper3.move_to(round(abs(outputs[2]) % 200))
+            utime.sleep_ms(500)
+            
             
             stepper4.move_to(round(abs(outputs[3]) % 200))
+            utime.sleep_ms(500)
             
 
         stepper1.move_to(0)
@@ -221,6 +224,6 @@ class generationRunner:
       
         
         #Once everything is done, this is what the class outputs
-        return self.serializedGenomes, self.serializedGenerationData
+        return self.newGenomes, self.serializedGenomes, self.serializedGenerationData
 
 
