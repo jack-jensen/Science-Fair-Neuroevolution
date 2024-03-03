@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title id="title">Science</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Science Fair Neuroevolution Project</h1>
+    
+    <!-- Start Button -->
+    <div id="startButton">
+        <button onclick="start()">Start</button>
+    </div>
+    
+    <!-- Hyperparameters Form Div -->
+    <div class="formDiv" id="hyperparametersFormDiv">
+        <form action="" id="hyperparametersForm">
+            <fieldset>
+                <legend>Hyperparameters</legend>
+                <label for="mutationRate">Enter Mutation Rate</label>
+                <br>
+                <input type="number" name="mutationRate" value="20" id="mutationRate">
+                <br>
+                <label for="percentageToDrop">Enter Percentage of Genomes to Eliminate</label>
+                <br>
+                <input type="number" name="percentageToDrop" value="50" id="percentageToDrop">
+                <br>
+                <label for="iterationsAllowed">Enter Iterations Allowed for Each Genome</label>
+                <br>
+                <input type="number" name="iterationsAllowed" id="iterationsAllowed">
+                <br>
+
+                <div id="numberOfGenomesDiv">
+                    <label for="numberOfGenomes">Enter Number of Genomes</label>
+                    <br>
+                    <input type="number" name="numberOfGenomes" value="75" id="numberOfGenomes">
+                    <br>
+                </div>
+                
+                <label for="submitButton"></label>
+                <br>
+                <input type="submit" name="submitButton">
+            </fieldset>
+        </form>
+
+    </div>
+
+    <!-- Greenlight Div -->
+    <div id="runOneGenomeDiv" class="center">
+        <p>Everything is going as planned. Verify the automation is in the correct location and give the green light!</p>
+        <button onclick="runOneGenome()" class="center">Run One Genome</button>
+    </div>
+
+    <!-- Fitness Form Div -->
+    <div class="formDiv" id="fitnessFormDiv">
+        <form id="fitnessForm">
+            <fieldset>
+                <legend>Fitness Scorer</legend>
+                <label for="identificationNumber">Enter Identification Number for Genome</label>
+                <br>
+                <input type="number" name="identificationNumber" id="identificationNumber">
+                <br>
+                <label for="x1">x1</label>
+                <br>
+                <input type="number" id="x1" name="x1">
+                <br>
+                <label for="y1">y1</label>
+                <br>
+                <input type="number" id="y1" name="y1">
+                <br>
+                <label for="x2">x2</label>
+                <br>
+                <input type="number" id="x2" name="x2">
+                <br>
+                <label for="y2">y2</label>
+                <br>
+                <input type="number" id="y2" name="y2">
+                <br>
+                <label for="submitButton"></label>
+                <br>
+                <input type="submit" name="submitButton">
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="index.js"></script>
+
+</html>
+
