@@ -12,7 +12,7 @@ class Stepper:
         self.position = 0
  
     def set_speed(self, speed):
-        self.delay = 1 / abs(speed)  # delay in seconds
+        self.delay = 1 / abs(speed)
  
     def set_direction(self, direction):
         self.dir_pin.value(direction)
@@ -25,9 +25,8 @@ class Stepper:
             self.step_pin.value(0)
             self.position += 1 if position > self.position else -1
  
-# Define the pins
-step_pin1 = 17  # GPIO number where step pin is connected
-dir_pin1 = 16   # GPIO number where dir pin is connected
+step_pin1 = 17
+dir_pin1 = 16
 
 step_pin2 = 19
 dir_pin2 = 18
@@ -38,7 +37,6 @@ dir_pin3 = 15
 step_pin4 = 12
 dir_pin4 = 13
  
-# Initialize stepper
 stepper1 = Stepper(step_pin1, dir_pin1)
 stepper2 = Stepper(step_pin2, dir_pin2)
 stepper3 = Stepper(step_pin3, dir_pin3)
