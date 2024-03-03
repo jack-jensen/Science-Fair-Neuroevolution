@@ -259,3 +259,14 @@ As you can tell by the late times, I have been spending all the time I can spare
 ### 9:00 pm
 
 I have been working relentlessly, and the biggest change to report would be the serialization. Instead of pickling, now I use JSON. The biggest error right now is that the data is not being transferred through the request to the server. It is very tiring and frustrating. I also began a little work on the legs of the machine, currently working to fit a hole onto the motor shaft. After the code error is fixed, I will look through all my code and make it pretty (while ensuring the algorithm is accurate). Then the only thing left will be the legs and coordinate grid and I will be ready to make my board.
+
+## March 3, 2024
+### 9:00 am
+
+I have been busy.
+
+- It stores the new genomes instead of me inputing the serialized new genomes. Now I have to run everything in one sitting. It still serializes the data, though.
+- I have cleaned the code and put that in the Code folder
+- I have added a copy of that in the LogCode folder. This code is explained through comments.
+- I have been designing the wheels.
+- I have the coordinate grid that I will use to run the machine on.
